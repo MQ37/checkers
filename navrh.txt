@@ -1,0 +1,55 @@
+- Hra
+    - hra končí pokud jeden hráč přišel o všechny figurky
+    - hra končí pokud je dáma proti dámě
+    - hra končí pokud už nejsou možné žádné tahy (prohrál ten, co nemá žádné možné tahy)
+
+- Hráč
+    - vlastní kameny a dámu
+        - 12 kamenů základ
+        - kameny jsou vyskládány v prvních třech řadách na tmavá pole
+    - může táhnou figurkama (kameny a dáma)
+    - první tah provádí hráč, který má světlé kameny
+
+- Kámen
+    - kámen patříci danému hráči (tmavá nebo světlá barva)
+    - posouvá se vždy dopředu po diagonále na volné pole pouze o 1 pole
+        - pokud se na nějáké digonále nachází soupeřova figurka a pole diagonálně za ní je volné, tak je nutné ji přeskočit (sebrat)
+        - nesmějí se přeskakovat vlastní figurky
+        - v jednom tahu se MUSÍ přeskočit (sebrat) více soupeřovích figurek pokud je to možné
+        - po každém přeskočení se může změnit směr (diagonálně) dalšího přeskoku
+        - figurky se odebírají z pole až na konci celé série přeskoků
+
+- Dáma (Kámen)
+    - stane se z kamene, který se dostane na tmavé pole základní řady protivníka (nejblíž danému hráči)
+    - označuje se korunovací (položí se na ní další kámen stejné barvy)
+    - dáma se může používat až po jednom tahu protivníka po korunovaci
+    - dáma se posouvá po diagonále, horizontálně i vertikálně o libovolný počet polí a může i dozadu (přeskakuje pouze diagonálně)
+    - dáma má při přeskakování přednost, pokud je možnost přeskočit dámou, tak se MUSÍ přeskakovat dámou
+    - při přeskoku může dáma na libovolné volné políčko za figurkou
+
+
+Entity:
+    - Pole:
+        - figurka, kterou obsahuje
+    - Šachovnice:
+        - seznam polí
+    - Hráč:
+        - barva
+        - seznam figurek [Kámen, Dáma]
+        - tah()
+            provede tah danout figurkou
+        - možné tahy()
+            vrátí seznam figurek s možností tahu a dané tahy
+    - Kámen (Figurka):
+        - pole na kterém se nachází
+        - tah()
+            provede daný tah
+        - možné tahy()
+            vrátí všechny možné tahy pro daný kámen
+    - Dáma (Kámen):
+        - tah()
+            provede daný tah
+        - možné tahy()
+            vrátí všechny možné tahy pro danou dámu
+    - Tah
+        # stromová reprezentace možných tahů figurky
