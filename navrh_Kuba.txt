@@ -4,14 +4,8 @@
 - bude se volat po každém tahu
 - figurky vykreslovat jako O, X - možná nějaké lepší znaky (ASCII)
 
-
-
-
 def Game():
 - hlavní metoda, vše spustí
-
-
-
 
 class Rock:
 - tah (diagonálně jen po černých políčkách o 1)
@@ -20,10 +14,7 @@ class Rock:
 - nesmí přeskakovat své figurky
 - neskočit mimo hrací pole
 
-
 - možné tahy (nějakým způsobem vykreslit?)
-
-
 
 
 class Dame (Rock):
@@ -35,20 +26,14 @@ class Dame (Rock):
 - možné vylepšené tahy(nějak vykreslit?)
 
 
-
-
 class Player:
 - barva (bílá x černá)
 - list figurek (12 rocks na začátku)
 - kapitulace?
 
 
-
-
 def Rules():
 - všechny podmínky hodit sem a při každém tahu spustit tuhle funkci?
-
-
 
 
 def canYouGame():
