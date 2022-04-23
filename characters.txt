@@ -1,0 +1,8 @@
+white dame -> U+2655 / U+26C1 ⛁
+black dame -> U+265B / U+26C3 ⛃
+
+white rock -> U+8858  / U+25CE ◎ / U+26AA ⚪ / U+26C0 ⛀
+black rock -> U+8855  / U+25C9 ◉ / U+26AB ⚫ / U+26C2 ⛂ 
+
+white square -> U+25A1 □
+black square -> U+25A0 ■
