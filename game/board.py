@@ -1,5 +1,6 @@
 from .field import Field
 from .color import Color
+from .coord_map import COORD_MAP_R, COORD_MAP_L
 
 class Board():
 
@@ -23,8 +24,10 @@ class Board():
     def get_board(self):
         return self.board
 
-    def get_field_at(self, col, row):
-        return self.board[row][col]
+    def get_field_at(self, coords):
+        j, i = coords
+        j = COORD_MAP_L[j]
+        return self.board[i-1][j-1]
 
     def _generate_board(self, size):
         board = []
@@ -33,7 +36,9 @@ class Board():
             for j in range(size):
                 color = Color.BLACK if (j + i) % 2 == 0 else Color.WHITE
                 # (j, i) coords are swapped
-                field = Field(color, (j, i))
+                coords = ( COORD_MAP_R[j+1], i+1 )
+                print(coords)
+                field = Field(color, coords)
                 row.append(field)
             board.append(row)
         self.board = board
