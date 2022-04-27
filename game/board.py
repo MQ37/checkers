@@ -1,3 +1,5 @@
+import math
+
 from .field import Field
 from .color import Color
 from .coord_map import COORD_MAP_R, COORD_MAP_L
@@ -26,6 +28,8 @@ class Board():
 
     def get_field_at(self, coords):
         j, i = coords
+        # So coords can also be string "A1" or tuple ("A", 1)
+        i = int(i)
         j = COORD_MAP_L[j]
         return self.board[i-1][j-1]
 
@@ -37,8 +41,50 @@ class Board():
                 color = Color.BLACK if (j + i) % 2 == 0 else Color.WHITE
                 # (j, i) coords are swapped
                 coords = ( COORD_MAP_R[j+1], i+1 )
-                print(coords)
                 field = Field(color, coords)
                 row.append(field)
             board.append(row)
         self.board = board
+
+    def pretty_print(self):
+        for row in self.board:
+            heading = "|"
+            content = "|"
+            for field in row:
+                x, y = field.get_coords()
+                if field.get_color() == Color.BLACK:
+                    col_heading = "▮ %s%s ▮" % (x, y)
+                else:
+                    col_heading = "▯ %s%s ▯" % (x, y)
+
+                if field.get_figure():
+                    if field.get_figure().get_color() == Color.BLACK:
+                        col_content = "▮"
+                    else:
+                        col_content = "▯"
+                else:
+                    col_content = ""
+
+
+                len_col_heading = len(col_heading)
+                len_col_content = len(col_content)
+                if len_col_heading > len_col_content:
+                    delta = len_col_heading - len_col_content
+                    col_content = (" " * math.floor(delta/2)) + col_content
+                    col_content += " " * math.ceil(delta/2)
+                else:
+                    delta = len_col_content - len_col_heading
+                    col_heading = (" " * math.floor(delta/2)) + col_heading
+                    col_heading += " " * math.ceil(delta/2)
+
+                col_heading = " %s |" % col_heading
+                col_content = " %s |" % col_content
+
+                heading += col_heading
+                content += col_content
+
+            length = len(heading)
+            print( "-"*length )
+            print(heading)
+            print(content)
+        print( "-"*length )
