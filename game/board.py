@@ -88,3 +88,20 @@ class Board():
             print(heading)
             print(content)
         print( "-"*length )
+
+    # cfrom is coords to move figure from
+    # cto is coords to move figure to
+    def move_figure(self, cfrom, cto):
+        ffrom = self.get_field_at(cfrom)
+        fto = self.get_field_at(cto)
+
+        # From field is empty
+        if not ffrom.get_figure():
+            return False
+        # Target field is full
+        if fto.get_figure():
+            return False
+
+        figure = ffrom.remove_figure()
+        fto.set_figure(figure)
+        figure.set_field(fto)
