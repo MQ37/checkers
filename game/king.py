@@ -1,6 +1,6 @@
 from .figure import Figure
 
-class Man(Figure):
+class King(Figure):
 
     # TODO: represent moves as tree object
     # TODO: get possible moves

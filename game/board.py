@@ -3,6 +3,8 @@ import math
 from .field import Field
 from .color import Color
 from .coord_map import COORD_MAP_R, COORD_MAP_L
+from .man import Man
+from .king import King
 
 class Board():
 
@@ -26,6 +28,7 @@ class Board():
     def get_board(self):
         return self.board
 
+    # coords -> (str, int) | ("A", 1) or str | "A1"
     def get_field_at(self, coords):
         j, i = coords
         # So coords can also be string "A1" or tuple ("A", 1)
@@ -105,3 +108,25 @@ class Board():
         figure = ffrom.remove_figure()
         fto.set_figure(figure)
         figure.set_field(fto)
+
+    # Exports boards state to CSV format
+    # returns CSV string
+    def export(self):
+        lines = ""
+        for row in self.board:
+            for field in row:
+                if field.get_figure():
+                    pos = field.get_coords()
+                    line = "%s%s," % pos
+                    if field.get_figure().get_color() == Color.WHITE:
+                        if type(field.get_figure()) == King:
+                            line += "ww"
+                        else:
+                            line += "w"
+                    else:
+                        if type(field.get_figure()) == King:
+                            line += "bb"
+                        else:
+                            line += "b"
+                    lines += "%s\n" % line
+        return lines
