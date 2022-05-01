@@ -1,3 +1,5 @@
+from .helpers import coords_to_index
+
 class Field():
     # Contained figure
     figure = None
@@ -10,7 +12,7 @@ class Field():
         self.color = color
         self.coords = coords
 
-    # Getters
+    # Getters and setters
     def get_figure(self):
         return self.figure
 
@@ -19,6 +21,17 @@ class Field():
 
     def get_coords(self):
         return self.coords
+
+    def get_index(self):
+        return coords_to_index(self.coords)
+
+    def set_figure(self, figure):
+        self.figure = figure
+
+    def remove_figure(self):
+        figure = self.figure
+        self.figure = None
+        return figure
 
     # Str Repr
     def __str__(self):
