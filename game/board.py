@@ -23,7 +23,7 @@ class Board():
 
     # Getters
     def get_size(self):
-        return len(board)
+        return len(self.board)
 
     def get_board(self):
         return self.board
@@ -35,6 +35,11 @@ class Board():
         i = int(i)
         j = COORD_MAP_L[j]
         return self.board[i-1][j-1]
+
+    # index -> (int, int) | (0, 0)
+    def get_field_at_index(self, index):
+        j, i = index
+        return self.board[i][j]
 
     def _generate_board(self, size):
         board = []

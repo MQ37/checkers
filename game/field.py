@@ -1,3 +1,5 @@
+from .helpers import coords_to_index
+
 class Field():
     # Contained figure
     figure = None
@@ -19,6 +21,9 @@ class Field():
 
     def get_coords(self):
         return self.coords
+
+    def get_index(self):
+        return coords_to_index(self.coords)
 
     def set_figure(self, figure):
         self.figure = figure

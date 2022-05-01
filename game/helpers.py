@@ -24,6 +24,6 @@ def index_to_coords(pos):
 def coords_to_index(coords):
     r, c = coords
     # for "A1" coords format
-    c = int(c) - 1
-    ir = COORD_MAP_L[r] - 1
-    return (ir, c)
+    c = int(c)
+    ir = COORD_MAP_L[r]
+    return (ir - 1, c - 1)

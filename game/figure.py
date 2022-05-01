@@ -20,6 +20,9 @@ class Figure():
     def get_coords(self):
         return self.field.get_coords()
 
+    def get_index(self):
+        return self.field.get_index()
+
     def set_field(self, field):
         self.field = field
 
