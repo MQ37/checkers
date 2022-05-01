@@ -55,7 +55,7 @@ class Board():
         self.board = board
 
     def pretty_print(self):
-        for row in self.board:
+        for row in self.board[::-1]:
             heading = "|"
             content = "|"
             for field in row:
@@ -135,3 +135,26 @@ class Board():
                             line += "b"
                     lines += "%s\n" % line
         return lines
+
+    def populate_board(self, playerw, playerb):
+        if self.get_size() != 8:
+            raise Exception("Figure placement unknow for board with size %s" % self.get_size())
+
+        posw = [ "A1", "A3", "B2", "C1", "C3", "D2",
+                 "E1", "E3", "F2", "G1", "G3", "H2" ]
+        posb = [ "A7", "B6", "B8", "C7", "D6", "D8",
+                 "E7", "F6", "F8", "G7", "H6", "H8" ]
+
+        for pos in posw:
+            figure = playerw.create_figure()
+            field = self.get_field_at(pos)
+
+            field.set_figure(figure)
+            figure.set_field(field)
+
+        for pos in posb:
+            figure = playerb.create_figure()
+            field = self.get_field_at(pos)
+
+            field.set_figure(figure)
+            figure.set_field(field)

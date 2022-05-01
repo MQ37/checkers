@@ -17,11 +17,11 @@ class Man(Figure):
             # Cannot move forward
             if j > board.get_size() - 2:
                 return []
-            # SOUTH WEST (from board pretty_print view)
+            # NORTH WEST (from board pretty_print view)
             if i > 0:
                 if not board.get_field_at_index( (i-1, j+1) ).get_figure():
                     moves.append( (i-1, j+1) )
-            # SOUTH EAST (from board pretty_print view)
+            # NORTH EAST (from board pretty_print view)
             if i < board.get_size() - 2:
                 if not board.get_field_at_index( (i+1, j+1) ).get_figure():
                     moves.append( (i+1, j+1) )
@@ -29,11 +29,11 @@ class Man(Figure):
             # Cannot move forward
             if j < 1:
                 return []
-            # NORTH WEST (from board pretty_print view)
+            # SOUTH WEST (from board pretty_print view)
             if i > 0:
                 if not board.get_field_at_index( (i-1, j-1) ).get_figure():
                     moves.append( (i-1, j-1) )
-            # NORTH EAST (from board pretty_print view)
+            # SOUTH EAST (from board pretty_print view)
             if i < board.get_size() - 2:
                 if not board.get_field_at_index( (i+1, j-1) ).get_figure():
                     moves.append( (i+1, j-1) )
