@@ -2,18 +2,14 @@ from .board import Board
 from .player import Player
 from .color import Color
 
-class Game():
 
-    board = None
-    playerw = None
-    playerb = None
-
+class Game:
     def __init__(self):
-        self.board = Board(8)
-        self.playerw = Player(Color.WHITE, self.board)
-        self.playerb = Player(Color.BLACK, self.board)
+        self.board = Board()
+        self.player_w = Player(Color.WHITE)
+        self.player_b = Player(Color.BLACK)
 
-        self.board.populate_board(self.playerw, self.playerb)
+        self.board.populate_board(self.player_w, self.player_b)
 
     # TODO export to CSV file
     def export_csv(self):

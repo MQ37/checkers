@@ -1,6 +1,7 @@
 from .coord_map import COORD_MAP_L, COORD_MAP_R
 from .color import Color
 
+
 # coords -> (str, int) | ("A", 1) or str | "A1"
 def get_color_by_coords(coords):
     r, c = coords
@@ -15,10 +16,12 @@ def get_color_by_coords(coords):
     else:
         return Color.WHITE
 
+
 def index_to_coords(pos):
     r, c = pos
-    cr = COORD_MAP_R[r+1]
-    return (cr, c+1)
+    cr = COORD_MAP_R[r + 1]
+    return (cr, c + 1)
+
 
 # coords -> (str, int) | ("A", 1) or str | "A1"
 def coords_to_index(coords):
