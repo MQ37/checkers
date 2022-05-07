@@ -9,7 +9,7 @@ class Game:
         self.player_w = Player(Color.WHITE)
         self.player_b = Player(Color.BLACK)
 
-        self.board.populate_board(self.player_w, self.player_b)
+        self.board.populate_board2(self.player_w, self.player_b)
 
     # TODO export to CSV file
     def export_csv(self):

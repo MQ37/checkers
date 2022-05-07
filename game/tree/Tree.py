@@ -8,6 +8,6 @@ class Tree:
         self._root_node = root_node
 
     @property
-    def root(self):
+    def root(self) -> TreeNode:
         return self._root_node
 

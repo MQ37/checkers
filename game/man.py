@@ -1,5 +1,6 @@
 from .figure import Figure
 from .color import Color
+from .position import Position
 from .tree.Tree import Tree
 from .tree.TreeNode import TreeNode
 
@@ -10,24 +11,24 @@ class Man(Figure):
 
     # TODO: represent moves as tree object
     # TODO: get possible moves
-    def possible_moves(self, board):
-        cur_pos = board.location(self)
-        j, i = cur_pos
+    def possible_moves(self, board) -> Tree:
+        cur_pos: Position = board.location(self)
 
         moves = []
 
         allow_up = self.color == Color.WHITE
         allow_down = self.color == Color.BLACK
 
-        for field, pos in board.locations_around(cur_pos, allow_up=allow_up, allow_down=allow_down):
+        for pos in board.locations_around(cur_pos, allow_up=allow_up, allow_down=allow_down):
             if board.is_field_empty(pos):
                 moves.append(TreeNode(pos))
-            elif board.field_at_indexes(pos).figure.owner != self.owner:
-                diff = (pos[0] - cur_pos[0], pos[1] - cur_pos[1])
-                take_position = (pos[0] + diff[0], pos[1] + diff[1])
+            elif board.field_at(pos).figure.owner != self.owner:
+                width_diff, height_diff = pos.diff(cur_pos)
+
+                take_position = pos.move(width_diff, height_diff)
 
                 if board.is_field_empty(take_position):
-                    moves.append(TreeNode(take_position, self.moves(board, take_position)))
+                    moves.append(TreeNode(take_position, self.moves(board, take_position, allow_up, allow_down)))
 
         return Tree(TreeNode(cur_pos, tuple(moves)))
 
@@ -58,13 +59,14 @@ class Man(Figure):
         #             moves.append((i + 1, j - 1))
         # return moves
 
-    def moves(self, board, cur_pos, allow_up, allow_down):
+    def moves(self, board, cur_pos: Position, allow_up, allow_down):
         moves = []
 
-        for field, pos in board.locations_around(cur_pos, allow_up=allow_up, allow_down=allow_down):
-            if not board.is_field_empty(pos) and board.field_at_indexes(pos).owner != self.owner:
-                diff = (pos[0] - cur_pos[0], pos[1] - cur_pos[1])
-                take_position = (pos[0] + diff[0], pos[1] + diff[1])
+        for pos in board.locations_around(cur_pos, allow_up=allow_up, allow_down=allow_down):
+            if not board.is_field_empty(pos) and board.field_at(pos).figure.owner != self.owner:
+                width_diff, height_diff = pos.diff(cur_pos)
+
+                take_position = pos.move(width_diff, height_diff)
 
                 if board.is_field_empty(take_position):
                     moves.append(TreeNode(take_position, self.moves(board, take_position, allow_up, allow_down)))

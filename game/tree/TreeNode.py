@@ -1,7 +1,10 @@
+from game.position import Position
+
+
 class TreeNode:
     def __init__(self, value, children=()):
         assert isinstance(children, tuple) and 0 <= len(children) < 4, f'Incorrect count of children ({len(children)})'
-        assert value is not None, "Value can't be None"
+        assert value is not None and isinstance(value, Position), "Value can't be None"
 
         self._value = value
         self._children = children
@@ -11,7 +14,7 @@ class TreeNode:
         return self._children
 
     @property
-    def value(self):
+    def value(self) -> Position:
         return self._value
 
     def __getitem__(self, idx):
@@ -19,5 +22,8 @@ class TreeNode:
 
         return self._children[idx]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._children)
+
+    def __repr__(self):
+        return f'Node(value: {self.value}, children=({",".join(map(repr, self.children))}))'
