@@ -3,6 +3,7 @@ from typing import Optional
 from .color import Color
 from .figure import Figure
 from .helpers import coords_to_index
+from .coord_map import COORD_MAP_R, COORD_MAP_L
 
 
 class Field:
@@ -32,8 +33,8 @@ class Field:
         return self._coords
 
     @property
-    def position_notation(self):
-        return coords_to_index(self._coords)
+    def coords_notation(self):
+        return f'{COORD_MAP_R[self._coords[1] + 1]}{8 - self._coords[0]}'
 
     @property
     def position(self) -> tuple[int, int]:

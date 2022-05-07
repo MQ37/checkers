@@ -31,9 +31,9 @@ class Board:
     # coords -> (str, int) | ("A", 1) or str | "A1"
     def field_at(self, notation: string):
         assert match(Board.CORRECT_NOTATION, notation), f'Incorrect notation coords ({notation})'
-        j, i = findall(Board.CORRECT_NOTATION, notation)[0]
+        i, j = findall(Board.CORRECT_NOTATION, notation)[0]
         # So coords can also be string "A1" or tuple ("A", 1)
-        return self.field_at_indexes((COORD_MAP_L[j] - 1, int(i) - 1))
+        return self.field_at_indexes((8 - int(j), COORD_MAP_L[i] - 1))
 
     # index -> (int, int) | (0, 0)
     def field_at_indexes(self, idxs) -> Field:
@@ -42,17 +42,39 @@ class Board:
 
         return self._board[idxs[0]][idxs[1]]
 
+    def is_field_empty(self, location):
+        return self.field_at_indexes(location).figure is None
+
+    def locations_around(self, location, allow_down=True, allow_up=True):
+        i, j = location
+
+        locations_around = []
+
+        if i-1 >= 0 and j-1 >= 0 and allow_up:
+            locations_around.append((self._board[i - 1][j - 1], (i - 1, j - 1)))
+
+        if i-1 >= 0 and j+1 < Board.BOARD_SIZE and allow_up:
+            locations_around.append((self._board[i - 1][j + 1], (i - 1, j + 1)))
+
+        if i+1 < Board.BOARD_SIZE and j-1 >= 0 and allow_down:
+            locations_around.append((self._board[i + 1][j - 1], (i + 1, j - 1)))
+
+        if i+1 < Board.BOARD_SIZE and j+1 < Board.BOARD_SIZE and allow_down:
+            locations_around.append((self._board[i + 1][j + 1], (i + 1, j + 1)))
+
+        return locations_around
+
     def pretty_print(self):
-        for row in reversed(self._board):
+        for row in self._board:
             heading = "|"
             content = "|"
 
             for field in row:
                 x, y = field.coords
                 if field.color == Color.BLACK:
-                    col_heading = "▮ %s%s ▮" % (x, y)
+                    col_heading = "▮ %s ▮" % field.coords_notation
                 else:
-                    col_heading = "▯ %s%s ▯" % (x, y)
+                    col_heading = "▯ %s ▯" % field.coords_notation
 
                 if field.figure:
                     if field.figure.color == Color.BLACK:
@@ -145,17 +167,17 @@ class Board:
             row = []
 
             for j in range(Board.BOARD_SIZE):
-                color = Color.BLACK if (j + i) % 2 == 0 else Color.WHITE
+                color = Color.BLACK if (i + j) % 2 == 0 else Color.WHITE
 
                 # (j, i) coords are swapped
-                row.append(Field(color, coords=(j, i)))
+                row.append(Field(color, coords=(i, j)))
 
             board.append(row)
 
         return board
 
     def _add_position(self, figure, pos):
-        idx_pos = (COORD_MAP_L[pos[0]]-1, int(pos[1])-1)
+        idx_pos = (8-int(pos[1]), COORD_MAP_L[pos[0]]-1)
 
         self._positions[figure] = idx_pos
 

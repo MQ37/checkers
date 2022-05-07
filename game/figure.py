@@ -17,6 +17,4 @@ class Figure(ABC):
     # For figure there are none and all possible moves
     # they will be defined in child classes
     def possible_moves(self, board):
-        return []
-
-
+        raise NotImplemented('Abstract method')
