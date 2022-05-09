@@ -1,38 +1,23 @@
-class Figure():
+from abc import ABC
 
-    owner = None
-    field = None
+from game.color import Color
+from game.tree.Tree import Tree
 
+
+class Figure(ABC):
     def __init__(self, owner):
-        self.owner = owner
-        self.field = None
+        self._owner = owner
 
-    # Getters and setters
-    def get_owner(self):
-        return self.owner
+    @property
+    def color(self) -> Color:
+        return self._owner.color
 
-    def get_field(self):
-        return self.field
-
-    def get_color(self):
-        return self.owner.get_color()
-
-    def get_coords(self):
-        return self.field.get_coords()
-
-    def get_index(self):
-        return self.field.get_index()
-
-    def set_field(self, field):
-        self.field = field
-
-    def remove_field(self):
-        field = self.field
-        self.field = None
-        return field
+    @property
+    def owner(self):
+        return self._owner
 
     # TODO: represent moves as tree object
     # For figure there are none and all possible moves
     # they will be defined in child classes
-    def possible_moves(self, board):
-        return None
+    def possible_moves(self, board) -> Tree:
+        raise NotImplemented('Abstract method')

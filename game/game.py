@@ -3,19 +3,13 @@ from .player import Player
 from .color import Color
 
 
-
-class Game():
-
-    board = None
-    playerw = None
-    playerb = None
-
+class Game:
     def __init__(self):
-        self.board = Board(8)
-        self.playerw = Player(Color.WHITE, self.board)
-        self.playerb = Player(Color.BLACK, self.board)
+        self.board = Board()
+        self.player_w = Player(Color.WHITE)
+        self.player_b = Player(Color.BLACK)
 
-        self.board.populate_board(self.playerw, self.playerb)
+        self.board.populate_board(self.player_w, self.player_b)
 
     # TODO export to CSV file
     def export_csv(self, output):
@@ -25,7 +19,6 @@ class Game():
                 return "Game was saved."
         except:
             print("WRONG DATA FORMAT - Check the data. ---> export_csv")
-
 
     # TODO zeptat se na vstup (obecný) ?
     def load_csv(self, input):
@@ -39,10 +32,10 @@ class Game():
 
                 for inx in data:
                     if (inx[0] in valid_characters) and (inx[1] in valid_numbers) and (inx[2] == ',') and (inx[5:]) == '':
-                        if ("w" or"ww") in inx[3:5]:     # inx[3:5] checks color
-                            self.playerw.create_figure(inx)
-                        elif ("b" or "bb") in inx[3:5]:     # inx[3:5] checks color
-                            self.playerb.create_figure(inx)
+                        if ("w" or "ww") in inx[3:5]:  # inx[3:5] checks color
+                            self.player_w.create_figure(inx)
+                        elif ("b" or "bb") in inx[3:5]:  # inx[3:5] checks color
+                            self.player_b.create_figure(inx)
                         else:
                             raise Exception("WRONG DATA FORMAT - Check the data.")
                     else:

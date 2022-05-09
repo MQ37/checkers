@@ -1,43 +1,46 @@
+from typing import Optional
+
+from .color import Color
 from .helpers import coords_to_index
+from .coord_map import COORD_MAP_R, COORD_MAP_L
+from .position import Position
 
-class Field():
-    # Contained figure
-    figure = None
-    # White, Black
-    color = None
-    # (X, Y)
-    coords = None
 
-    def __init__(self, color, coords):
-        self.color = color
-        self.coords = coords
+class Field:
+    def __init__(self, color: Color, pos: Position, figure: Optional = None):
+        # White, Black
+        self._color = color
+        # Position(row, col)
+        self._pos = pos
+        # Contained figure
+        self._figure = figure
 
     # Getters and setters
-    def get_figure(self):
-        return self.figure
+    @property
+    def figure(self) -> Optional:
+        return self._figure
 
-    def get_color(self):
-        return self.color
+    @figure.setter
+    def figure(self, figure):
+        self._figure = figure
 
-    def get_coords(self):
-        return self.coords
+    @property
+    def color(self):
+        return self._color
 
-    def get_index(self):
-        return coords_to_index(self.coords)
+    @property
+    def position(self):
+        return self._pos
 
-    def set_figure(self, figure):
-        self.figure = figure
-
-    def remove_figure(self):
-        figure = self.figure
-        self.figure = None
-        return figure
+    def clear(self):
+        self._figure = None
 
     # Str Repr
     def __str__(self):
-        return "Field (%s) at %s containing %s" % (self.color, self.coords,
-                                                    self.figure)
+        if self.figure:
+            return "Field (%s) at %s containing %s" % (self.color, self.position.notation, self.figure)
+        else:
+            return "Field (%s) at %s containing Nothing" % (self.color, self.position.notation)
 
     def __repr__(self):
         return str(self)
-
