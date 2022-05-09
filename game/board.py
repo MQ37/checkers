@@ -61,15 +61,15 @@ class Board():
             for field in row:
                 x, y = field.get_coords()
                 if field.get_color() == Color.BLACK:
-                    col_heading = "▮ %s%s ▮" % (x, y)
+                    col_heading = "\u25A0 %s%s \u25A0" % (x, y)
                 else:
-                    col_heading = "▯ %s%s ▯" % (x, y)
+                    col_heading = "\u25A1 %s%s \u25A1" % (x, y)
 
                 if field.get_figure():
                     if field.get_figure().get_color() == Color.BLACK:
-                        col_content = "▮"
+                        col_content = "\u26C2"
                     else:
-                        col_content = "▯"
+                        col_content = "\u26C0"
                 else:
                     col_content = ""
 
