@@ -16,8 +16,8 @@ class Man(Figure):
 
         moves = []
 
-        allow_up = self.color == Color.WHITE
-        allow_down = self.color == Color.BLACK
+        allow_up = self.color is Color.WHITE
+        allow_down = self.color is Color.BLACK
 
         for pos in board.locations_around(cur_pos, allow_up=allow_up, allow_down=allow_down):
             if board.is_field_empty(pos):
@@ -65,6 +65,18 @@ class Man(Figure):
         for pos in board.locations_around(cur_pos, allow_up=allow_up, allow_down=allow_down):
             if not board.is_field_empty(pos) and board.field_at(pos).figure.owner != self.owner:
                 width_diff, height_diff = pos.diff(cur_pos)
+
+                # TODO: add check if at the end of the board
+                row, col = pos.tuple
+                row_diff = width_diff
+                col_diff = height_diff
+
+                take_row = row + row_diff
+                take_col = col + col_diff
+                if take_row < 0 or take_row > board.BOARD_SIZE:
+                    continue
+                if take_col < 0 or take_col > board.BOARD_SIZE:
+                    continue
 
                 take_position = pos.move(width_diff, height_diff)
 
