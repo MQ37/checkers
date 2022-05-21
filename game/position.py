@@ -6,8 +6,9 @@ class Position:
     _CORRECT_NOTATION = r'^([A-H])([1-8])$'
 
     def __init__(self, row, col):
-        assert 0 <= row < 8, f'Bad coordinates ({row}, {col})'
-        assert 0 <= col < 8, f'Bad coordinates ({row}, {col})'
+        assert 0 <= row < 8, f'Bad row coordinates ({row}, {col})'
+        assert 0 <= col < 8, f'Bad col coordinates ({row}, {col})'
+        assert row+col % 2 == 0, f'Bad coordinates - You trying to access black field! ({row}, {col})'
 
         self._row = row
         self._col = col

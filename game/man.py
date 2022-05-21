@@ -28,38 +28,11 @@ class Man(Figure):
                 take_position = pos.move(width_diff, height_diff)
 
                 if board.is_field_empty(take_position):
-                    moves.append(TreeNode(take_position, self.moves(board, take_position, allow_up, allow_down)))
+                    moves.append(TreeNode(take_position, self._possible_takes(board, take_position, allow_up, allow_down)))
 
         return Tree(TreeNode(cur_pos, tuple(moves)))
 
-        # if self.color == Color.WHITE:
-        #     # Cannot move forward
-        #     from game.board import Board
-        #     if j > Board.BOARD_SIZE - 2:
-        #         return []
-        #     # NORTH WEST (from board pretty_print view)
-        #     if i > 0:
-        #         if not board.field_at_indexes((i - 1, j + 1)).figure:
-        #             moves.append((i - 1, j + 1))
-        #     # NORTH EAST (from board pretty_print view)
-        #     if i < Board.BOARD_SIZE - 2:
-        #         if not board.field_at_indexes((i + 1, j + 1)).figure:
-        #             moves.append((i + 1, j + 1))
-        # else:
-        #     # Cannot move forward
-        #     if j < 1:
-        #         return []
-        #     # SOUTH WEST (from board pretty_print view)
-        #     if i > 0:
-        #         if not board.field_at_indexes((i - 1, j - 1)).figure:
-        #             moves.append((i - 1, j - 1))
-        #     # SOUTH EAST (from board pretty_print view)
-        #     if i < Board.BOARD_SIZE - 2:
-        #         if not board.field_at_indexes((i + 1, j - 1)).figure:
-        #             moves.append((i + 1, j - 1))
-        # return moves
-
-    def moves(self, board, cur_pos: Position, allow_up, allow_down):
+    def _possible_takes(self, board, cur_pos: Position, allow_up, allow_down):
         moves = []
 
         for pos in board.locations_around(cur_pos, allow_up=allow_up, allow_down=allow_down):
@@ -69,7 +42,7 @@ class Man(Figure):
                 take_position = pos.move(width_diff, height_diff)
 
                 if board.is_field_empty(take_position):
-                    moves.append(TreeNode(take_position, self.moves(board, take_position, allow_up, allow_down)))
+                    moves.append(TreeNode(take_position, self._possible_takes(board, take_position, allow_up, allow_down)))
 
         return tuple(moves)
 

@@ -34,22 +34,27 @@ class Board:
         return self.field_at(pos).figure is None
 
     @staticmethod
-    def locations_around(pos: Position, allow_down=True, allow_up=True) -> list[Position]:
+    def locations_around(pos: Position, allow_down=True, allow_up=True, single=True) -> list[Position]:
         locations_around = []
 
-        if allow_up and pos.row - 1 >= 0 and pos.col - 1 >= 0:
-            locations_around.append(pos.move(-1, -1))
+        for i in range(1, (1 if single else Board.BOARD_SIZE)+1):
+            if allow_up and pos.row - i >= 0 and pos.col - i >= 0:
+                locations_around.append(pos.move(-i, -i))
 
-        if allow_up and pos.row - 1 >= 0 and pos.col + 1 < Board.BOARD_SIZE:
-            locations_around.append(pos.move(-1, +1))
+            if allow_up and pos.row - i >= 0 and pos.col + i < Board.BOARD_SIZE:
+                locations_around.append(pos.move(-i, +i))
 
-        if allow_down and pos.row + 1 < Board.BOARD_SIZE and pos.col - 1 >= 0:
-            locations_around.append(pos.move(+1, -1))
+            if allow_down and pos.row + i < Board.BOARD_SIZE and pos.col - i >= 0:
+                locations_around.append(pos.move(+i, -i))
 
-        if allow_down and pos.row + 1 < Board.BOARD_SIZE and pos.col + 1 < Board.BOARD_SIZE:
-            locations_around.append(pos.move(+1, +1))
+            if allow_down and pos.row + i < Board.BOARD_SIZE and pos.col + i < Board.BOARD_SIZE:
+                locations_around.append(pos.move(+i, +i))
 
         return locations_around
+
+    @staticmethod
+    def is_position_within_bounds(pos: Position):
+        return 0 <= pos.row < Board.BOARD_SIZE and 0 <= pos.col < Board.BOARD_SIZE
 
     def pretty_print(self):
         for row in self._board:
