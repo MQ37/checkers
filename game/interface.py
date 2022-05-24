@@ -1,24 +1,15 @@
-# TODO check surrender
-# return 0 if player changed his mind
-
-def interface_surrender(player): # maybe player1, player2 ?
+def interface_surrender(player_loser, player_winner): # maybe player1, player2 ?
     certainty = input("Are you really sure you want to surrender? Type Y/N ⇉ ")
     if certainty == "Y":
-            print(f"Winner is {player}.") # TODO have to add NEXT PLAYER wins
+            print(f"{player_loser} gave up. Winner is {player_winner}!") # TODO have to add NEXT PLAYER wins
             quit()
-    elif certainty == "N":
-        return(0)
 
     while not certainty == ("Y" or "N"):
         certainty = input("Oh common! Just type Y/N ⇉ ")
         if certainty == "Y":
-            print(f"Winner is ⇉ {player}.") #TODO winner is the second player
+            print(f"{player_loser} gave up. Winner is {player_winner}!") #TODO winner is the second player
             quit()
-        elif certainty == "N":
-            return(0)
-
-# TODO check move
-
+            
 def interface_move(player_nickname, moves):
     out_header = f"----{player_nickname} is picking his next move----"
     print(out_header)
