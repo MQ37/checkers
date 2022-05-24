@@ -58,15 +58,15 @@ class Board:
 
             for field in row:
                 if field.color == Color.BLACK:
-                    col_heading = "\u25A0 %s \u25A0" % field.position.notation
+                    col_heading = "B %s B" % field.position.notation
                 else:
-                    col_heading = "\u25A1 %s \u25A1" % field.position.notation
+                    col_heading = "W %s W" % field.position.notation
 
                 if field.figure:
                     if field.figure.color == Color.BLACK:
-                        col_content = "\u26C2"
+                        col_content = "B"
                     else:
-                        col_content = "\u26C0"
+                        col_content = "W"
                 else:
                     col_content = ""
 
@@ -95,7 +95,7 @@ class Board:
 
     # c_from is coords to move figure from
     # c_to is coords to move figure to
-    def move_figure(self, player: Player, pos_from: Position, pos_to: Position):
+    def _move_figure(self, player: Player, pos_from: Position, pos_to: Position):
         field_from = self.field_at(pos_from)
         field_to = self.field_at(pos_to)
 
@@ -107,7 +107,29 @@ class Board:
         field_from.clear()
         field_to.figure = moving_figure
 
+        self._positions[moving_figure] = pos_to
+
         return True
+
+    def _take_pos(self, pos):
+        print("TAKING", pos)
+        field = self.field_at(pos)
+        figure = field.figure
+
+        del self._positions[figure]
+        field.clear()
+
+    def _take_figure(self, figure):
+        pos = self.location(figure)
+        self._take_pos(pos)
+
+    def move(self, player, pos_from, pos_to, pos_taking=None):
+        if pos_taking:
+            field_taking = self.field_at(pos_taking)
+            if field_taking.figure and field_taking.figure.owner is not player:
+                self._take_pos(pos_taking)
+        print("MOVING", pos_from, pos_to)
+        return self._move_figure(player, pos_from, pos_to)
 
     # Exports boards state to CSV format
     # returns CSV string
@@ -163,3 +185,34 @@ class Board:
 
     def location(self, figure):
         return self._positions.get(figure)
+
+    # Returns figures as generator
+    def get_player_figures(self, player):
+        return filter(lambda fig: fig.owner is player, self._positions)
+
+    # Returns dict figure -> tree
+    def get_player_playable_figures(self, player):
+        figures = self.get_player_figures(player)
+        playable_figures = {}
+
+        for fig in figures:
+            tree = fig.possible_moves(self)
+            # Skip figures without possible moves
+            if not tree.root.children:
+                continue
+            playable_figures[fig] = tree
+
+        # Figures that cat take have priority
+        priority_figures = {}
+
+        for fig in playable_figures:
+            tree = playable_figures[fig]
+            if any([child.taking for child in tree.root.children]):
+                priority_figures[fig] = tree
+
+        if priority_figures:
+            return priority_figures
+        else:
+            return playable_figures
+
+        return playable_figures

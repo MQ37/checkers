@@ -20,3 +20,9 @@ class Player:
         figure = King(self) if king else Man(self)
         self._figures.append(figure)
         return figure
+
+    def __str__(self):
+        return "Player %s" % self.color
+
+    def __repr__(self):
+        return str(self)

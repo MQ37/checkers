@@ -25,10 +25,21 @@ class Man(Figure):
             elif board.field_at(pos).figure.owner != self.owner:
                 width_diff, height_diff = pos.diff(cur_pos)
 
+                # TODO: add check if at the end of the board
+                row, col = pos.tuple
+                row_diff = width_diff
+                col_diff = height_diff
+
+                take_row = row + row_diff
+                take_col = col + col_diff
+                if take_row < 0 or take_row > board.BOARD_SIZE - 1:
+                    continue
+                if take_col < 0 or take_col > board.BOARD_SIZE - 1:
+                    continue
                 take_position = pos.move(width_diff, height_diff)
 
                 if board.is_field_empty(take_position):
-                    moves.append(TreeNode(take_position, self.moves(board, take_position, allow_up, allow_down)))
+                    moves.append(TreeNode(take_position, self.moves(board, take_position, allow_up, allow_down), taking=pos))
 
         return Tree(TreeNode(cur_pos, tuple(moves)))
 
@@ -73,15 +84,15 @@ class Man(Figure):
 
                 take_row = row + row_diff
                 take_col = col + col_diff
-                if take_row < 0 or take_row > board.BOARD_SIZE:
+                if take_row < 0 or take_row > board.BOARD_SIZE - 1:
                     continue
-                if take_col < 0 or take_col > board.BOARD_SIZE:
+                if take_col < 0 or take_col > board.BOARD_SIZE - 1:
                     continue
 
                 take_position = pos.move(width_diff, height_diff)
 
                 if board.is_field_empty(take_position):
-                    moves.append(TreeNode(take_position, self.moves(board, take_position, allow_up, allow_down)))
+                    moves.append(TreeNode(take_position, self.moves(board, take_position, allow_up, allow_down), taking=pos))
 
         return tuple(moves)
 
