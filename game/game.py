@@ -6,21 +6,19 @@ from .color import Color
 class Game:
     def __init__(self):
         self.board = Board()
-        self.player_w = Player(Color.WHITE)
-        self.player_b = Player(Color.BLACK)
+        self.player_w = Player(Color.WHITE, Player.nickname)
+        self.player_b = Player(Color.BLACK, Player.nickname)
 
         self.board.populate_board(self.player_w, self.player_b)
 
-    # TODO export to CSV file
     def export_csv(self, output):
         try:
-            with open(output, "w", newline='') as file:
+            with open(output, "w", newline='') as file:  # newline for avoiding blank lines
                 file.write(self.board.export())
                 return "Game was saved."
         except:
             print("WRONG DATA FORMAT - Check the data. ---> export_csv")
 
-    # TODO zeptat se na vstup (obecný) ?
     def load_csv(self, input):
         valid_characters = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
         valid_numbers = ('1', '2', '3', '4', '5', '6', '7', '8')
