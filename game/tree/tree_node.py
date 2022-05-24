@@ -2,12 +2,13 @@ from game.position import Position
 
 
 class TreeNode:
-    def __init__(self, value, children=()):
+    def __init__(self, value, taking=False, children=()):
         assert isinstance(children, tuple) and 0 <= len(children) < 4, f'Incorrect count of children ({len(children)})'
         assert value is not None and isinstance(value, Position), "Value can't be None"
 
         self._value = value
         self._children = children
+        self._taking = taking
 
     @property
     def children(self):

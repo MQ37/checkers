@@ -1,16 +1,12 @@
 from .figure import Figure
 from .color import Color
 from .position import Position
-from .tree.Tree import Tree
-from .tree.TreeNode import TreeNode
+from .tree.tree import Tree
+from .tree.tree_node import TreeNode
 
 
 class Man(Figure):
-    def __init__(self, owner):
-        super().__init__(owner)
 
-    # TODO: represent moves as tree object
-    # TODO: get possible moves
     def possible_moves(self, board) -> Tree:
         cur_pos: Position = board.location(self)
 
@@ -27,10 +23,10 @@ class Man(Figure):
 
                 take_position = pos.move(width_diff, height_diff)
 
-                if board.is_field_empty(take_position):
-                    moves.append(TreeNode(take_position, self._possible_takes(board, take_position, allow_up, allow_down)))
+                if take_position and board.is_field_empty(take_position):
+                    moves.append(TreeNode(take_position, taking=True, children=self._possible_takes(board, take_position, allow_up, allow_down)))
 
-        return Tree(TreeNode(cur_pos, tuple(moves)))
+        return Tree(TreeNode(cur_pos, children=tuple(moves)))
 
     def _possible_takes(self, board, cur_pos: Position, allow_up, allow_down):
         moves = []
@@ -41,7 +37,7 @@ class Man(Figure):
 
                 take_position = pos.move(width_diff, height_diff)
 
-                if board.is_field_empty(take_position):
+                if take_position and board.is_field_empty(take_position):
                     moves.append(TreeNode(take_position, self._possible_takes(board, take_position, allow_up, allow_down)))
 
         return tuple(moves)

@@ -1,7 +1,7 @@
 from .figure import Figure
 from .position import Position
-from .tree.Tree import Tree
-from .tree.TreeNode import TreeNode
+from .tree.tree import Tree
+from .tree.tree_node import TreeNode
 
 
 class King(Figure):
@@ -23,11 +23,14 @@ class King(Figure):
                     if take_position is None:
                         take_position = pos.move(width_diff*i, height_diff*i)
 
+                        if take_position is None:
+                            break
+
                     if not board.is_position_within_bounds(take_position):
                         break
 
                     if board.is_field_empty(take_position):
-                        moves.append(TreeNode(take_position, self._possible_takes(board, take_position)))
+                        moves.append(TreeNode(take_position, taking=True, children=self._possible_takes(board, take_position)))
 
                     i += 1
 
@@ -46,6 +49,9 @@ class King(Figure):
                 while True:
                     if take_position is None:
                         take_position = pos.move(width_diff * i, height_diff * i)
+
+                        if take_position is None:
+                            break
 
                     if not board.is_position_within_bounds(take_position):
                         break

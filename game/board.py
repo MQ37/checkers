@@ -1,4 +1,3 @@
-import csv
 import math
 
 from .field import Field
@@ -7,27 +6,15 @@ from .color import Color
 from .king import King
 from .player import Player
 from .position import Position
+from .helpers import BOARD_SIZE
 
 
 class Board:
-    BOARD_SIZE = 8
-
-    # when size = 8
-    # [0][0] is A1
-    # [0][1] is B1
-    # [7][6] is F8
-    # [7][7] is H8
-    # board[0] is first row "1"
-    # board[1] is second row "2"
-    # board[7] is eight row "7"
-
     def __init__(self):
         self._board: list[list[Field]] = list(self._generate_board())
         self._positions = {}
 
-    # coords -> (str, int) | ("A", 1) or str | "A1"
     def field_at(self, pos: Position) -> Field:
-        # So coords can also be string "A1" or tuple ("A", 1)
         return self._board[pos.row][pos.col]
 
     def is_field_empty(self, pos: Position):
@@ -37,24 +24,24 @@ class Board:
     def locations_around(pos: Position, allow_down=True, allow_up=True, single=True) -> list[Position]:
         locations_around = []
 
-        for i in range(1, (1 if single else Board.BOARD_SIZE)+1):
+        for i in range(1, (1 if single else BOARD_SIZE)+1):
             if allow_up and pos.row - i >= 0 and pos.col - i >= 0:
                 locations_around.append(pos.move(-i, -i))
 
-            if allow_up and pos.row - i >= 0 and pos.col + i < Board.BOARD_SIZE:
+            if allow_up and pos.row - i >= 0 and pos.col + i < BOARD_SIZE:
                 locations_around.append(pos.move(-i, +i))
 
-            if allow_down and pos.row + i < Board.BOARD_SIZE and pos.col - i >= 0:
+            if allow_down and pos.row + i < BOARD_SIZE and pos.col - i >= 0:
                 locations_around.append(pos.move(+i, -i))
 
-            if allow_down and pos.row + i < Board.BOARD_SIZE and pos.col + i < Board.BOARD_SIZE:
+            if allow_down and pos.row + i < BOARD_SIZE and pos.col + i < BOARD_SIZE:
                 locations_around.append(pos.move(+i, +i))
 
         return locations_around
 
     @staticmethod
     def is_position_within_bounds(pos: Position):
-        return 0 <= pos.row < Board.BOARD_SIZE and 0 <= pos.col < Board.BOARD_SIZE
+        return 0 <= pos.row < BOARD_SIZE and 0 <= pos.col < BOARD_SIZE
 
     def pretty_print(self):
         for row in self._board:
@@ -158,9 +145,9 @@ class Board:
 
     @staticmethod
     def _generate_board() -> list[list[Field]]:
-        for row in range(Board.BOARD_SIZE):
+        for row in range(BOARD_SIZE):
             yield [
-                Field(Board._color_match(row, col), Position(row, col)) for col in range(Board.BOARD_SIZE)
+                Field(Board._color_match(row, col), Position(row, col)) for col in range(BOARD_SIZE)
             ]
 
     def _add_position(self, figure, pos: Position):

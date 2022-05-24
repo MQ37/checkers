@@ -1,14 +1,12 @@
 from .coord_map import COORD_MAP_R, COORD_MAP_L
+from .helpers import BOARD_SIZE, CORRECT_NOTATION_REGEX
 from re import match, findall
 
 
 class Position:
-    _CORRECT_NOTATION = r'^([A-H])([1-8])$'
-
     def __init__(self, row, col):
-        assert 0 <= row < 8, f'Bad row coordinates ({row}, {col})'
-        assert 0 <= col < 8, f'Bad col coordinates ({row}, {col})'
-        assert row+col % 2 == 0, f'Bad coordinates - You trying to access black field! ({row}, {col})'
+        assert 0 <= row < BOARD_SIZE, f'Bad row coordinates ({row}, {col})'
+        assert 0 <= col < BOARD_SIZE, f'Bad col coordinates ({row}, {col})'
 
         self._row = row
         self._col = col
@@ -30,7 +28,8 @@ class Position:
         return self.row, self.col
 
     def move(self, width, height):
-        return Position(self.row + width, self.col + height)
+        if 0 <= self.row + width < BOARD_SIZE and 0 <= self.col + height < BOARD_SIZE:
+            return Position(self.row + width, self.col + height)
 
     def diff(self, pos):
         return self.row - pos.row, self.col - pos.col
@@ -40,9 +39,9 @@ class Position:
 
     @staticmethod
     def from_notation(notation):
-        assert match(Position._CORRECT_NOTATION, notation), f'Incorrect notation coords ({notation})'
+        assert match(CORRECT_NOTATION_REGEX, notation), f'Incorrect notation coords ({notation})'
 
-        col, row = findall(Position._CORRECT_NOTATION, notation)[0]
+        col, row = findall(CORRECT_NOTATION_REGEX, notation)[0]
 
         return Position(8 - int(row), COORD_MAP_L[col] - 1)
 
