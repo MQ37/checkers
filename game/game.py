@@ -7,8 +7,8 @@ class Game:
     def __init__(self, interface):
         self.board = Board()
         self.interface = interface
-        self.player_w = Player(Color.WHITE, Player.nickname)
-        self.player_b = Player(Color.BLACK, Player.nickname)
+        self.player_w = Player(Color.WHITE)
+        self.player_b = Player(Color.BLACK)
         self.nturns = 0
 
         self.board.populate_board(self.player_w, self.player_b)
@@ -45,14 +45,14 @@ class Game:
         except:
             return "WRONG DATA FORMAT - Check the data."
 
-    def turn(self):
-        print("TURN", self.nturns)
-        self.board.pretty_print()
-
+    def _get_current_player(self):
         if self.nturns % 2 == 0:
-            player = self.player_w
+            return self.player_w
         else:
-            player = self.player_b
+            return self.player_b
+
+    def turn(self):
+        player = self._get_current_player()
 
         playable_figures = self.board.get_player_playable_figures(player)
 
@@ -73,7 +73,7 @@ class Game:
 
         #sel = input("Select move: ")
         #sel = int(sel)
-        move = self.interface.interface_turn(player, playable_figures)
+        move = self.interface.interface_turn(self.board, player, playable_figures)
 
         #move = moves[sel]
         pos_from = move[0][0]

@@ -1,7 +1,11 @@
 import game
 from game.position import Position
+from game.interface import CLIInterface
 
-game = game.Game()
+interface = CLIInterface()
+interface.ask_nicknames()
+
+game = game.Game(interface)
 
 while True:
     game.turn()

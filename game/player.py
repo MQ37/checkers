@@ -3,10 +3,9 @@ from .king import King
 
 
 class Player:
-    def __init__(self, color, nickname):
+    def __init__(self, color):
         self._figures = []
         self._color = color
-        self._nickname = nickname
 
     # Getters and setters
     @property
@@ -17,17 +16,13 @@ class Player:
     def color(self):
         return self._color
 
-    @property
-    def nickname(self):
-        return self._nickname
-
     def create_figure(self, king=False):
         figure = King(self) if king else Man(self)
         self._figures.append(figure)
         return figure
 
     def __str__(self):
-        return "Player %s" % self.color
+        return "Player (%s)" % self.color
 
     def __repr__(self):
         return str(self)
