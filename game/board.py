@@ -170,7 +170,7 @@ class Board:
 
     @staticmethod
     def _color_match(row, col):
-        return Color.BLACK if (row + col) % 2 == 0 else Color.WHITE
+        return Color.BLACK if (row + col) % 2 == 1 else Color.WHITE
 
     @staticmethod
     def _generate_board() -> list[list[Field]]:
