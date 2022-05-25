@@ -1,4 +1,3 @@
-import csv
 import math
 
 from .field import Field

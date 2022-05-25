@@ -4,24 +4,23 @@ from .color import Color
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, interface):
         self.board = Board()
-        self.player_w = Player(Color.WHITE)
-        self.player_b = Player(Color.BLACK)
+        self.interface = interface
+        self.player_w = Player(Color.WHITE, Player.nickname)
+        self.player_b = Player(Color.BLACK, Player.nickname)
         self.nturns = 0
 
         self.board.populate_board(self.player_w, self.player_b)
 
-    # TODO export to CSV file
     def export_csv(self, output):
         try:
-            with open(output, "w", newline='') as file:
+            with open(output, "w", newline='') as file:  # newline for avoiding blank lines
                 file.write(self.board.export())
                 return "Game was saved."
         except:
             print("WRONG DATA FORMAT - Check the data. ---> export_csv")
 
-    # TODO zeptat se na vstup (obecný) ?
     def load_csv(self, input):
         valid_characters = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
         valid_numbers = ('1', '2', '3', '4', '5', '6', '7', '8')
@@ -57,25 +56,26 @@ class Game:
 
         playable_figures = self.board.get_player_playable_figures(player)
 
-        for i, fig in enumerate(playable_figures):
-            print("%s: %s" % (i, playable_figures[fig].root.value.notation))
+        #for i, fig in enumerate(playable_figures):
+        #    print("%s: %s" % (i, playable_figures[fig].root.value.notation))
 
-        sel = input("Select figure: ")
-        sel = int(sel)
+        #sel = input("Select figure: ")
+        #sel = int(sel)
 
-        figure = list(playable_figures.keys())[sel]
-        tree = playable_figures[figure]
+        #figure = list(playable_figures.keys())[sel]
+        #tree = playable_figures[figure]
 
-        # TODO: get moves by priority (taking)
-        moves = tree.as_moves()
-        for i, path in enumerate(moves):
-            print(path)
-            print("%s: %s" % (i, " -> ".join( map(lambda pos: pos[0].notation, path) ) ) )
+        ## TODO: get moves by priority (taking)
+        #moves = tree.as_moves()
+        #for i, path in enumerate(moves):
+        #    print(path)
+        #    print("%s: %s" % (i, " -> ".join( map(lambda pos: pos[0].notation, path) ) ) )
 
-        sel = input("Select move: ")
-        sel = int(sel)
+        #sel = input("Select move: ")
+        #sel = int(sel)
+        move = self.interface.interface_turn(player, playable_figures)
 
-        move = moves[sel]
+        #move = moves[sel]
         pos_from = move[0][0]
         for m in move[1:]:
             print(m)
