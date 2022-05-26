@@ -1,3 +1,4 @@
+from pickle import TRUE
 from .board import Board
 from .player import Player
 from .color import Color
@@ -31,9 +32,17 @@ class Game:
                 for inx in data:
                     if (inx[0] in valid_characters) and (inx[1] in valid_numbers) and (inx[2] == ',') and (inx[5:]) == '':
                         if ("w" or "ww") in inx[3:5]:  # inx[3:5] checks color
-                            self.player_w.create_figure(inx)
+                            if "w" in inx[3] and inx[4] == '':
+                                self.player_w.create_figure(inx)
+                            else:
+                                self.player_w.create_figure(inx, king=True)
+
                         elif ("b" or "bb") in inx[3:5]:  # inx[3:5] checks color
-                            self.player_b.create_figure(inx)
+                            if "b" in inx[3] and inx[4] == '':
+                                self.player_b.create_figure(inx)
+                            else:
+                                self.player_b.create_figure(inx, king=True)
+                                
                         else:
                             raise Exception("WRONG DATA FORMAT - Check the data.")
                     else:
