@@ -1,4 +1,5 @@
 import math
+import re
 
 from .field import Field
 from .color import Color
@@ -154,6 +155,34 @@ class Board:
                             line += "b"
                     lines += "%s\n" % line
         return lines
+
+    def load(self, player_w, player_b, path):
+        with open(path, "r") as f:
+            data = f.readlines()
+
+            for i, line in enumerate(data):
+                # Skip empty lines
+                if not line.strip():
+                    continue
+                match = re.match("([A-H][1-8]),.*(ww|w|bb|b)$", line)
+                if not match:
+                    raise Exception("Invalid file format line %s: %s" % (i, line))
+
+                pos_not, fig = match.groups()
+                pos = Position.from_notation(pos_not)
+
+                # White
+                if fig.startswith("w"):
+                    # TODO add support for King
+                    figure = player_w.create_figure()
+                    self.field_at(pos).figure = figure
+                    self._add_position(figure, pos)
+                # Black
+                else: 
+                    # TODO add support for King
+                    figure = player_b.create_figure()
+                    self.field_at(pos).figure = figure
+                    self._add_position(figure, pos)
 
     def populate_board(self, player_w, player_b):
         pos_w = [

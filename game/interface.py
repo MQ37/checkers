@@ -28,6 +28,33 @@ class CLIInterface:
     def _get_player_nick(self, player):
         return self.nicknames.get(player.color, repr(player))
 
+    def menu(self, game):
+        options = (
+                    (1, "Start new game for two players"),
+                    (2, "Start new game with AI"),
+                    (3, "Load game from CSV for two players"),
+                    (4, "Load game from CSV with AI"),
+                )
+
+        for opt in options:
+            print("%s: %s" % opt)
+
+        choice = int(input("Choice: "))
+        while not choice in range(1, len(options) + 1):
+            choice = int(input("Wrong choice: "))
+
+        if choice == 1:
+            return {"load": None, "ai": False}
+        elif choice == 2:
+            return {"load": None, "ai": True}
+        elif choice in range(3, 4 + 1):
+            path = input("Path to CSV file: ")
+            if choice == 3:
+                return {"load": path, "ai": False}
+            elif choice == 4:
+                return {"load": path, "ai": True}
+
+
     def interface_turn(self, board, player, playable_figures):
         board.pretty_print()
 
@@ -55,8 +82,9 @@ class CLIInterface:
             print("%s: %s" %
                   (i + 1, " -> ".join(map(lambda pos: pos[0].notation, path))))
 
-        [print("-", end="") for i in range(len(out_header))
-         ]  # flexible ("footer") according to length of "header"
+        # Print footer
+        for _ in range(len(out_header)):
+            print("-", end="")
 
         choice = int(input("\nChoose your next move from above! ⇉ "))
         while not choice in range(1, len(moves) + 1):

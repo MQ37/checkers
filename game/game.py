@@ -8,49 +8,31 @@ class Game:
     def __init__(self, interface):
         self.board = Board()
         self.interface = interface
+        settings = interface.menu(self)
+
         self.player_w = Player(Color.WHITE)
-        self.player_b = Player(Color.BLACK)
+        if settings["ai"]:
+            raise Exception("AI not implemented yet")
+        else:
+            self.player_b = Player(Color.BLACK)
         self.nturns = 0
 
-        self.board.populate_board(self.player_w, self.player_b)
+        if settings["load"]:
+            self.load_csv(settings["load"])
+        else:
+            self.board.populate_board(self.player_w, self.player_b)
 
-    def export_csv(self, output):
+    def export_csv(self, path):
         try:
-            with open(output, "w",
-                      newline='') as file:  # newline for avoiding blank lines
-                file.write(self.board.export())
+            with open(path, "w",
+                      newline='') as f:  # newline for avoiding blank lines
+                f.write(self.board.export())
                 return "Game was saved."
         except:
             print("WRONG DATA FORMAT - Check the data. ---> export_csv")
 
-    def load_csv(self, input):
-        valid_characters = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
-        valid_numbers = ('1', '2', '3', '4', '5', '6', '7', '8')
-
-        try:
-            with open(input, "r") as file:
-                file_reader = file.read()
-                data = list(file_reader.split("\n"))
-
-                for inx in data:
-                    if (inx[0] in valid_characters) and (
-                            inx[1]
-                            in valid_numbers) and (inx[2]
-                                                   == ',') and (inx[5:]) == '':
-                        if ("w" or "ww") in inx[3:5]:  # inx[3:5] checks color
-                            self.player_w.create_figure(inx)
-                        elif ("b"
-                              or "bb") in inx[3:5]:  # inx[3:5] checks color
-                            self.player_b.create_figure(inx)
-                        else:
-                            raise Exception(
-                                "WRONG DATA FORMAT - Check the data.")
-                    else:
-                        raise Exception("WRONG DATA FORMAT - Check the data.")
-                return "Game was loaded."
-
-        except:
-            return "WRONG DATA FORMAT - Check the data."
+    def load_csv(self, path):
+        self.board.load(self.player_w, self.player_b, path)
 
     def _get_current_player(self):
         if self.nturns % 2 == 0:
