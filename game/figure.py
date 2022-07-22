@@ -5,6 +5,7 @@ from game.tree.Tree import Tree
 
 
 class Figure(ABC):
+
     def __init__(self, owner):
         self._owner = owner
 

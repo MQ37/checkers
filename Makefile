@@ -4,4 +4,7 @@ test:
 run:
 	python3 run.py
 
+format:
+	yapf -i -r game/
+
 .PHONY: test run

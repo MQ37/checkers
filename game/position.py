@@ -39,7 +39,8 @@ class Position:
 
     @staticmethod
     def from_notation(notation):
-        assert match(Position._CORRECT_NOTATION, notation), f'Incorrect notation coords ({notation})'
+        assert match(Position._CORRECT_NOTATION,
+                     notation), f'Incorrect notation coords ({notation})'
 
         col, row = findall(Position._CORRECT_NOTATION, notation)[0]
 

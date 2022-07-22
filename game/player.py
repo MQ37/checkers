@@ -3,6 +3,7 @@ from .king import King
 
 
 class Player:
+
     def __init__(self, color):
         self._figures = []
         self._color = color
