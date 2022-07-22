@@ -4,6 +4,7 @@ from .color import Color
 
 
 class Game:
+
     def __init__(self, interface):
         self.board = Board()
         self.interface = interface
@@ -15,7 +16,8 @@ class Game:
 
     def export_csv(self, output):
         try:
-            with open(output, "w", newline='') as file:  # newline for avoiding blank lines
+            with open(output, "w",
+                      newline='') as file:  # newline for avoiding blank lines
                 file.write(self.board.export())
                 return "Game was saved."
         except:
@@ -31,13 +33,18 @@ class Game:
                 data = list(file_reader.split("\n"))
 
                 for inx in data:
-                    if (inx[0] in valid_characters) and (inx[1] in valid_numbers) and (inx[2] == ',') and (inx[5:]) == '':
+                    if (inx[0] in valid_characters) and (
+                            inx[1]
+                            in valid_numbers) and (inx[2]
+                                                   == ',') and (inx[5:]) == '':
                         if ("w" or "ww") in inx[3:5]:  # inx[3:5] checks color
                             self.player_w.create_figure(inx)
-                        elif ("b" or "bb") in inx[3:5]:  # inx[3:5] checks color
+                        elif ("b"
+                              or "bb") in inx[3:5]:  # inx[3:5] checks color
                             self.player_b.create_figure(inx)
                         else:
-                            raise Exception("WRONG DATA FORMAT - Check the data.")
+                            raise Exception(
+                                "WRONG DATA FORMAT - Check the data.")
                     else:
                         raise Exception("WRONG DATA FORMAT - Check the data.")
                 return "Game was loaded."
@@ -73,7 +80,8 @@ class Game:
 
         #sel = input("Select move: ")
         #sel = int(sel)
-        move = self.interface.interface_turn(self.board, player, playable_figures)
+        move = self.interface.interface_turn(self.board, player,
+                                             playable_figures)
 
         #move = moves[sel]
         pos_from = move[0][0]
@@ -83,5 +91,5 @@ class Game:
             pos_taking = m[1]
             self.board.move(player, pos_from, pos_to, pos_taking)
             pos_from = pos_to
-        
+
         self.nturns += 1

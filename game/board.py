@@ -33,7 +33,9 @@ class Board:
         return self.field_at(pos).figure is None
 
     @staticmethod
-    def locations_around(pos: Position, allow_down=True, allow_up=True) -> list[Position]:
+    def locations_around(pos: Position,
+                         allow_down=True,
+                         allow_up=True) -> list[Position]:
         locations_around = []
 
         if allow_up and pos.row - 1 >= 0 and pos.col - 1 >= 0:
@@ -57,9 +59,9 @@ class Board:
 
             for field in row:
                 if field.color == Color.BLACK:
-                    col_heading = "B %s B" % field.position.notation
+                    col_heading = "\u25A0 %s \u25A0" % field.position.notation
                 else:
-                    col_heading = "W %s W" % field.position.notation
+                    col_heading = "\u25A1 %s \u25A1" % field.position.notation
 
                 if field.figure:
                     if field.figure.color == Color.BLACK:
@@ -94,7 +96,8 @@ class Board:
 
     # c_from is coords to move figure from
     # c_to is coords to move figure to
-    def _move_figure(self, player: Player, pos_from: Position, pos_to: Position):
+    def _move_figure(self, player: Player, pos_from: Position,
+                     pos_to: Position):
         field_from = self.field_at(pos_from)
         field_to = self.field_at(pos_to)
 
@@ -153,10 +156,14 @@ class Board:
         return lines
 
     def populate_board(self, player_w, player_b):
-        pos_w = ["A1", "A3", "B2", "C1", "C3", "D2",
-                 "E1", "E3", "F2", "G1", "G3", "H2"]
-        pos_b = ["A7", "B6", "B8", "C7", "D6", "D8",
-                 "E7", "F6", "F8", "G7", "H6", "H8"]
+        pos_w = [
+            "A1", "A3", "B2", "C1", "C3", "D2", "E1", "E3", "F2", "G1", "G3",
+            "H2"
+        ]
+        pos_b = [
+            "A7", "B6", "B8", "C7", "D6", "D8", "E7", "F6", "F8", "G7", "H6",
+            "H8"
+        ]
 
         for pos in map(Position.from_notation, pos_w):
             figure = player_w.create_figure()
@@ -176,7 +183,8 @@ class Board:
     def _generate_board() -> list[list[Field]]:
         for row in range(Board.BOARD_SIZE):
             yield [
-                Field(Board._color_match(row, col), Position(row, col)) for col in range(Board.BOARD_SIZE)
+                Field(Board._color_match(row, col), Position(row, col))
+                for col in range(Board.BOARD_SIZE)
             ]
 
     def _add_position(self, figure, pos: Position):
