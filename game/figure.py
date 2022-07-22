@@ -1,7 +1,7 @@
 from abc import ABC
 
 from game.color import Color
-from game.tree.Tree import Tree
+from game.tree.tree import Tree
 
 
 class Figure(ABC):

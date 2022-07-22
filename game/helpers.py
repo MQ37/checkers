@@ -1,6 +1,8 @@
 from .coord_map import COORD_MAP_L, COORD_MAP_R
 from .color import Color
 
+BOARD_SIZE = 8
+CORRECT_NOTATION_REGEX = r'^([A-H])([1-8])$'
 
 # coords -> (str, int) | ("A", 1) or str | "A1"
 def get_color_by_coords(coords):

@@ -1,4 +1,4 @@
-from game.tree.TreeNode import TreeNode
+from game.tree.tree_node import TreeNode
 
 
 class Tree:
