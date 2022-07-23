@@ -11,6 +11,7 @@ from .helpers import BOARD_SIZE
 
 
 class Board:
+
     def __init__(self):
         self._board: list[list[Field]] = list(self._generate_board())
         self._positions = {}
@@ -22,10 +23,13 @@ class Board:
         return self.field_at(pos).figure is None
 
     @staticmethod
-    def locations_around(pos: Position, allow_down=True, allow_up=True, single=True) -> list[Position]:
+    def locations_around(pos: Position,
+                         allow_down=True,
+                         allow_up=True,
+                         single=True) -> list[Position]:
         locations_around = []
 
-        for i in range(1, (1 if single else BOARD_SIZE)+1):
+        for i in range(1, (1 if single else BOARD_SIZE) + 1):
             if allow_up and pos.row - i >= 0 and pos.col - i >= 0:
                 locations_around.append(pos.move(-i, -i))
 
@@ -157,7 +161,8 @@ class Board:
                     continue
                 match = re.match("([A-H][1-8]),.*(ww|w|bb|b)$", line)
                 if not match:
-                    raise Exception("Invalid file format line %s: %s" % (i, line))
+                    raise Exception("Invalid file format line %s: %s" %
+                                    (i, line))
 
                 pos_not, fig = match.groups()
                 pos = Position.from_notation(pos_not)
@@ -169,7 +174,7 @@ class Board:
                     self.field_at(pos).figure = figure
                     self._add_position(figure, pos)
                 # Black
-                else: 
+                else:
                     # TODO add support for King
                     figure = player_b.create_figure()
                     self.field_at(pos).figure = figure

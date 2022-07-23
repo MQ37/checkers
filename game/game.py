@@ -8,13 +8,16 @@ class Game:
     def __init__(self, interface):
         self.board = Board()
         self.interface = interface
+
         settings = interface.menu(self)
 
         self.player_w = Player(Color.WHITE)
         if settings["ai"]:
             raise Exception("AI not implemented yet")
+            interface.ask_nicknames(ai=True)
         else:
             self.player_b = Player(Color.BLACK)
+            interface.ask_nicknames()
         self.nturns = 0
 
         if settings["load"]:

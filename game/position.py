@@ -4,6 +4,7 @@ from re import match, findall
 
 
 class Position:
+
     def __init__(self, row, col):
         assert 0 <= row < BOARD_SIZE, f'Bad row coordinates ({row}, {col})'
         assert 0 <= col < BOARD_SIZE, f'Bad col coordinates ({row}, {col})'

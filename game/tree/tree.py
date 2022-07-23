@@ -17,16 +17,24 @@ class Tree:
             print(" -> ".join(
                 map(lambda pos: (pos[9].notation, pos[1].notation), path)))
 
-    def as_moves(self):
+    def as_moves(self, split_taking=False):
         moves = []
+        taking_moves = []
 
         def walk(node, path):
             if len(node) == 0:
-                moves.append(path + [(node.value, node.taking)])
+                if node.taking or any([_node[1] for _node in path]):
+                    taking_moves.append(path + [(node.value, node.taking)])
+                else:
+                    moves.append(path + [(node.value, node.taking)])
                 return
 
             for child in node.children:
                 walk(child, path + [(node.value, node.taking)])
 
         walk(self.root, [])
-        return moves
+
+        if split_taking:
+            return moves, taking_moves
+        else:
+            return moves + taking_moves

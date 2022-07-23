@@ -30,11 +30,11 @@ class CLIInterface:
 
     def menu(self, game):
         options = (
-                    (1, "Start new game for two players"),
-                    (2, "Start new game with AI"),
-                    (3, "Load game from CSV for two players"),
-                    (4, "Load game from CSV with AI"),
-                )
+            (1, "Start new game for two players"),
+            (2, "Start new game with AI"),
+            (3, "Load game from CSV for two players"),
+            (4, "Load game from CSV with AI"),
+        )
 
         for opt in options:
             print("%s: %s" % opt)
@@ -54,7 +54,6 @@ class CLIInterface:
             elif choice == 4:
                 return {"load": path, "ai": True}
 
-
     def interface_turn(self, board, player, playable_figures):
         board.pretty_print()
 
@@ -73,12 +72,14 @@ class CLIInterface:
 
         figure = list(playable_figures.keys())[choice - 1]
         tree = playable_figures[figure]
-        moves = tree.as_moves()
+        moves, taking_moves = tree.as_moves(split_taking=True)
 
-        #for move in range(len(moves)):
-        #    print(f"{move+1}: {moves[move]}")
-        for i, path in enumerate(moves):
-            print(path)
+        if taking_moves:
+            valid_moves = taking_moves
+        else:
+            valid_moves = moves
+
+        for i, path in enumerate(valid_moves):
             print("%s: %s" %
                   (i + 1, " -> ".join(map(lambda pos: pos[0].notation, path))))
 
@@ -87,13 +88,14 @@ class CLIInterface:
             print("-", end="")
 
         choice = int(input("\nChoose your next move from above! ⇉ "))
-        while not choice in range(1, len(moves) + 1):
+        while not choice in range(1, len(valid_moves) + 1):
             choice = int(input("There is no such move, try different one! ⇉ "))
 
-        return (moves[choice - 1])
+        return (valid_moves[choice - 1])
 
-    def ask_nicknames(self):
+    def ask_nicknames(self, ai=False):
         nick_w = input("Choose white player nickname: ")
-        nick_b = input("Choose black player nickname: ")
         self.nicknames[Color.WHITE] = nick_w
-        self.nicknames[Color.BLACK] = nick_b
+        if not ai:
+            nick_b = input("Choose black player nickname: ")
+            self.nicknames[Color.BLACK] = nick_b
