@@ -21,16 +21,18 @@ class Tree:
         moves = []
         taking_moves = []
 
-        def walk(node, path):
+        def walk(node, path, taking=False):
             if len(node) == 0:
-                if node.taking or any([_node[1] for _node in path]):
+                if node.taking or taking:
                     taking_moves.append(path + [(node.value, node.taking)])
                 else:
                     moves.append(path + [(node.value, node.taking)])
                 return
 
             for child in node.children:
-                walk(child, path + [(node.value, node.taking)])
+                walk(child,
+                     path + [(node.value, node.taking)],
+                     taking=taking or node.taking)
 
         walk(self.root, [])
 
