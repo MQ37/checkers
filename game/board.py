@@ -116,24 +116,26 @@ class Board:
 
         return True
 
-    def _take_pos(self, pos):
-        print("TAKING", pos)
+    def _remove_position(self, pos):
         field = self.field_at(pos)
         figure = field.figure
 
+        # Remove from game state
         del self._positions[figure]
         field.clear()
 
-    def _take_figure(self, figure):
+        # Remove from owner
+        figure.remove_figure()
+
+    def _remove_figure(self, figure):
         pos = self.location(figure)
-        self._take_pos(pos)
+        self._remove_position(pos)
 
     def move(self, player, pos_from, pos_to, pos_taking=None):
         if pos_taking:
             field_taking = self.field_at(pos_taking)
             if field_taking.figure and field_taking.figure.owner is not player:
-                self._take_pos(pos_taking)
-        print("MOVING", pos_from, pos_to)
+                self._remove_position(pos_taking)
         return self._move_figure(player, pos_from, pos_to)
 
     # Exports boards state to CSV format
@@ -253,3 +255,13 @@ class Board:
             return priority_figures
 
         return playable_figures
+
+    # Returns None or player winner
+    # TODO: check win in other scenarios
+    # for example when figures are locked and no move is possible
+    def check_win(self):
+        potential_winner = list(self._positions.keys())[0].owner
+        for figure in self._positions:
+            if figure.owner is not potential_winner:
+                return None
+        return potential_winner

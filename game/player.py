@@ -22,6 +22,9 @@ class Player:
         self._figures.append(figure)
         return figure
 
+    def remove_figure(self, figure):
+        self._figures.remove(figure)
+
     def __str__(self):
         return "Player (%s)" % self.color
 

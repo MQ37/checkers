@@ -22,3 +22,6 @@ class Figure(ABC):
     # they will be defined in child classes
     def possible_moves(self, board) -> Tree:
         raise NotImplemented('Abstract method')
+
+    def remove_figure(self):
+        self._owner.remove_figure(self)

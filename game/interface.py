@@ -99,3 +99,7 @@ class CLIInterface:
         if not ai:
             nick_b = input("Choose black player nickname: ")
             self.nicknames[Color.BLACK] = nick_b
+
+    def show_winner(self, player):
+        player_nickname = self._get_player_nick(player)
+        print("----- Winner is %s -----" % player_nickname)
