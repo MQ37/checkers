@@ -30,8 +30,8 @@ class Game:
             with open(path, "w",
                       newline='') as f:  # newline for avoiding blank lines
                 f.write(self.board.export())
-                return "Game was saved."
-        except:
+                print("Game was saved.")
+        except Exception:
             print("WRONG DATA FORMAT - Check the data. ---> export_csv")
 
     def load_csv(self, path):

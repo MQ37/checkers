@@ -61,9 +61,16 @@ class Board:
 
                 if field.figure:
                     if field.figure.color == Color.BLACK:
-                        col_content = "B"
+                        if isinstance(field.figure, King):
+                            col_content = "BB"
+                        else:
+                            col_content = "B"
+
                     else:
-                        col_content = "W"
+                        if isinstance(field.figure, King):
+                            col_content = "WW"
+                        else:
+                            col_content = "W"
                 else:
                     col_content = ""
 
@@ -139,12 +146,12 @@ class Board:
                     pos = field.position.notation
                     line = "%s," % pos
                     if field.figure.color == Color.WHITE:
-                        if type(field.figure) == King:
+                        if isinstance(field.figure, King):
                             line += "ww"
                         else:
                             line += "w"
                     else:
-                        if type(field.figure) == King:
+                        if isinstance(field.figure, King):
                             line += "bb"
                         else:
                             line += "b"
