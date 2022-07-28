@@ -4,8 +4,7 @@ from game.position import Position
 class TreeNode:
 
     def __init__(self, value, children=(), taking=None):
-        assert isinstance(children, tuple) and 0 <= len(
-            children) < 4, f'Incorrect count of children ({len(children)})'
+        assert isinstance(children, tuple)
         assert value is not None and isinstance(
             value, Position), "Value can't be None"
 

@@ -33,3 +33,48 @@ def coords_to_index(coords):
     c = int(c)
     ir = COORD_MAP_L[r]
     return (ir - 1, c - 1)
+
+
+def diff_to_allow(width_diff, height_diff):
+    allow_se = False
+    allow_sw = False
+    allow_ne = False
+    allow_nw = False
+
+    if width_diff < 0 and height_diff < 0:
+        allow_nw = True
+    if width_diff < 0 and height_diff > 0:
+        allow_ne = True
+    if width_diff > 0 and height_diff < 0:
+        allow_sw = True
+    if width_diff > 0 and height_diff > 0:
+        allow_se = True
+
+    return allow_sw, allow_se, allow_nw, allow_ne
+
+
+def allow_to_diff(allow_sw, allow_se, allow_nw, allow_ne):
+    if allow_nw:
+        width_diff = -1
+        height_diff = -1
+    if allow_ne:
+        width_diff = -1
+        height_diff = 1
+    elif allow_sw:
+        width_diff = 1
+        height_diff = -1
+    elif allow_se:
+        width_diff = 1
+        height_diff = 1
+
+    return width_diff, height_diff
+
+
+def invert_single_allow(allow_sw, allow_se, allow_nw, allow_ne):
+    width_diff, height_diff = allow_to_diff(allow_sw, allow_se, allow_nw,
+                                            allow_ne)
+    return diff_to_allow(width_diff * -1, height_diff * -1)
+
+
+def negate_allows(allow_sw, allow_se, allow_nw, allow_ne):
+    return not allow_sw, not allow_se, not allow_nw, not allow_ne

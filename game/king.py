@@ -2,10 +2,16 @@ from .figure import Figure
 from .position import Position
 from .tree.tree import Tree
 from .tree.tree_node import TreeNode
+from .helpers import diff_to_allow, invert_single_allow, negate_allows
 
 
 class King(Figure):
 
+    # TODO: how to handle moves after taking, is taking after taking mandatory
+    # or can we choose not to take after first take and move to field that has
+    # no taking position? Right now taking after taking is not mandatory and
+    # player can choose not to take after first take.
+    # We need to check game rules
     def possible_moves(self, board):
         cur_pos: Position = board.location(self)
 
@@ -17,60 +23,73 @@ class King(Figure):
             elif board.field_at(pos).figure.owner != self.owner:
                 width_diff, height_diff = pos.diff(cur_pos)
 
-                take_position = None
-                i = 1
+                allow_sw, allow_se, allow_nw, allow_ne = diff_to_allow(
+                    width_diff, height_diff)
 
-                while True:
-                    if take_position is None:
-                        take_position = pos.move(width_diff * i,
-                                                 height_diff * i)
-
-                        if take_position is None:
-                            break
-
-                    if not board.is_position_within_bounds(take_position):
-                        break
-
-                    if board.is_field_empty(take_position):
-                        moves.append(
-                            TreeNode(take_position,
-                                     taking=True,
-                                     children=self._possible_takes(
-                                         board, take_position)))
-
-                    i += 1
-
-        return Tree(TreeNode(cur_pos, tuple(moves)))
-
-    def _possible_takes(self, board, cur_pos: Position):
-        moves = []
-
-        for pos in board.locations_around(cur_pos, single=True):
-            if not board.is_field_empty(
-                    pos) and board.field_at(pos).figure.owner != self.owner:
-                width_diff, height_diff = pos.diff(cur_pos)
-
-                take_position = None
-                i = 1
-
-                while True:
-                    if take_position is None:
-                        take_position = pos.move(width_diff * i,
-                                                 height_diff * i)
-
-                        if take_position is None:
-                            break
-
-                    if not board.is_position_within_bounds(take_position):
-                        break
-
+                for take_position in board.locations_around(pos,
+                                                            single=False,
+                                                            allow_down=False,
+                                                            allow_up=False,
+                                                            allow_sw=allow_sw,
+                                                            allow_se=allow_se,
+                                                            allow_nw=allow_nw,
+                                                            allow_ne=allow_ne):
                     if board.is_field_empty(take_position):
                         moves.append(
                             TreeNode(
                                 take_position,
-                                self._possible_takes(board, take_position)))
+                                taking=pos,
+                                children=self._possible_takes(
+                                    board,
+                                    take_position,
+                                    allows=negate_allows(*invert_single_allow(
+                                        allow_sw, allow_se, allow_nw,
+                                        allow_ne)))))
 
-                    i += 1
+        return Tree(TreeNode(cur_pos, tuple(moves)))
+
+    def _possible_takes(self,
+                        board,
+                        cur_pos: Position,
+                        allows=(True, True, True, True)):
+        moves = []
+
+        allow_sw, allow_se, allow_nw, allow_ne = allows
+
+        for pos in board.locations_around(cur_pos,
+                                          single=True,
+                                          allow_down=False,
+                                          allow_up=False,
+                                          allow_sw=allow_sw,
+                                          allow_se=allow_se,
+                                          allow_nw=allow_nw,
+                                          allow_ne=allow_ne):
+            if not board.is_field_empty(
+                    pos) and board.field_at(pos).figure.owner != self.owner:
+                width_diff, height_diff = pos.diff(cur_pos)
+
+                allow_sw, allow_se, allow_nw, allow_ne = diff_to_allow(
+                    width_diff, height_diff)
+
+                for take_position in board.locations_around(pos,
+                                                            single=False,
+                                                            allow_down=False,
+                                                            allow_up=False,
+                                                            allow_sw=allow_sw,
+                                                            allow_se=allow_se,
+                                                            allow_nw=allow_nw,
+                                                            allow_ne=allow_ne):
+                    if board.is_field_empty(take_position):
+                        moves.append(
+                            TreeNode(
+                                take_position,
+                                taking=pos,
+                                children=self._possible_takes(
+                                    board,
+                                    take_position,
+                                    allows=negate_allows(*invert_single_allow(
+                                        allow_sw, allow_se, allow_nw,
+                                        allow_ne)))))
 
         return tuple(moves)
 

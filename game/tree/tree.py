@@ -14,8 +14,7 @@ class Tree:
 
     def print_moves(self):
         for path in self.as_moves():
-            print(" -> ".join(
-                map(lambda pos: (pos[9].notation, pos[1].notation), path)))
+            print(" -> ".join(map(lambda pos: pos[0].notation, path)))
 
     def as_moves(self, split_taking=False):
         moves = []

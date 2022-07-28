@@ -67,4 +67,6 @@ class Game:
             self.interface.show_winner(winner)
             exit()
 
+        self.board.transform_mans_to_kings(self.player_w, self.player_b)
+
         self.nturns += 1

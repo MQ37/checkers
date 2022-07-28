@@ -17,9 +17,6 @@ class Figure(ABC):
     def owner(self):
         return self._owner
 
-    # TODO: represent moves as tree object
-    # For figure there are none and all possible moves
-    # they will be defined in child classes
     def possible_moves(self, board) -> Tree:
         raise NotImplemented('Abstract method')
 

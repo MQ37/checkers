@@ -26,20 +26,31 @@ class Board:
     def locations_around(pos: Position,
                          allow_down=True,
                          allow_up=True,
+                         allow_sw=False,
+                         allow_se=False,
+                         allow_nw=False,
+                         allow_ne=False,
                          single=True) -> list[Position]:
         locations_around = []
 
+        if allow_down:
+            allow_sw = True
+            allow_se = True
+        if allow_up:
+            allow_nw = True
+            allow_ne = True
+
         for i in range(1, (1 if single else BOARD_SIZE) + 1):
-            if allow_up and pos.row - i >= 0 and pos.col - i >= 0:
+            if allow_nw and pos.row - i >= 0 and pos.col - i >= 0:
                 locations_around.append(pos.move(-i, -i))
 
-            if allow_up and pos.row - i >= 0 and pos.col + i < BOARD_SIZE:
+            if allow_ne and pos.row - i >= 0 and pos.col + i < BOARD_SIZE:
                 locations_around.append(pos.move(-i, +i))
 
-            if allow_down and pos.row + i < BOARD_SIZE and pos.col - i >= 0:
+            if allow_sw and pos.row + i < BOARD_SIZE and pos.col - i >= 0:
                 locations_around.append(pos.move(+i, -i))
 
-            if allow_down and pos.row + i < BOARD_SIZE and pos.col + i < BOARD_SIZE:
+            if allow_se and pos.row + i < BOARD_SIZE and pos.col + i < BOARD_SIZE:
                 locations_around.append(pos.move(+i, +i))
 
         return locations_around
@@ -168,26 +179,35 @@ class Board:
                 # Skip empty lines
                 if not line.strip():
                     continue
-                match = re.match("([A-H][1-8]),.*(ww|w|bb|b)$", line)
+                match = re.match("([A-H][1-8]),\ ?(w+|b+)$", line)
                 if not match:
                     raise Exception("Invalid file format line %s: %s" %
                                     (i, line))
 
                 pos_not, fig = match.groups()
-                pos = Position.from_notation(pos_not)
+                fig = fig.lower().strip()
+                pos = Position.from_notation(pos_not.strip())
 
                 # White
                 if fig.startswith("w"):
-                    # TODO add support for King
-                    figure = player_w.create_figure()
+                    if fig == "ww":
+                        figure = player_w.create_figure(king=True)
+                    else:
+                        figure = player_w.create_figure()
                     self.field_at(pos).figure = figure
                     self._add_position(figure, pos)
                 # Black
                 else:
-                    # TODO add support for King
-                    figure = player_b.create_figure()
+                    if fig == "bb":
+                        figure = player_b.create_figure(king=True)
+                    else:
+                        figure = player_b.create_figure()
                     self.field_at(pos).figure = figure
                     self._add_position(figure, pos)
+
+    def _add_figure(self, figure, pos):
+        self.field_at(pos).figure = figure
+        self._add_position(figure, pos)
 
     def populate_board(self, player_w, player_b):
         pos_w = [
@@ -201,13 +221,11 @@ class Board:
 
         for pos in map(Position.from_notation, pos_w):
             figure = player_w.create_figure()
-            self.field_at(pos).figure = figure
-            self._add_position(figure, pos)
+            self._add_figure(figure, pos)
 
         for pos in map(Position.from_notation, pos_b):
             figure = player_b.create_figure()
-            self.field_at(pos).figure = figure
-            self._add_position(figure, pos)
+            self._add_figure(figure, pos)
 
     @staticmethod
     def _color_match(row, col):
@@ -232,6 +250,7 @@ class Board:
         return filter(lambda fig: fig.owner is player, self._positions)
 
     # Returns dict figure -> tree
+    # TODO: add king priority
     def get_player_playable_figures(self, player):
         figures = self.get_player_figures(player)
         playable_figures = {}
@@ -255,6 +274,31 @@ class Board:
             return priority_figures
 
         return playable_figures
+
+    # Check if Man figures are eligible to transform to King
+    def transform_mans_to_kings(self, player_w, player_b):
+        W_POS_NOT = ("B8", "D8", "F8", "H8")
+        B_POS_NOT = ("A1", "C1", "E1", "G1")
+
+        # list if (figure, pos) to transform
+        to_transform = []
+
+        for figure, pos in self._positions.items():
+            if figure.color is Color.WHITE:
+                if pos.notation in W_POS_NOT:
+                    to_transform.append((figure, pos))
+            else:
+                if pos.notation in B_POS_NOT:
+                    to_transform.append((figure, pos))
+
+        for figure, pos in to_transform:
+            self._remove_figure(figure)
+            if figure.color is Color.WHITE:
+                king_figure = player_w.create_figure(king=True)
+                self._add_figure(king_figure, pos)
+            else:
+                king_figure = player_b.create_figure(king=True)
+                self._add_figure(king_figure, pos)
 
     # Returns None or player winner
     # TODO: check win in other scenarios

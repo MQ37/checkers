@@ -12,8 +12,8 @@ class Man(Figure):
 
         moves = []
 
-        allow_up = self.color == Color.WHITE
-        allow_down = self.color == Color.BLACK
+        allow_up = self.color is Color.WHITE
+        allow_down = self.color is Color.BLACK
 
         for pos in board.locations_around(cur_pos,
                                           allow_up=allow_up,
@@ -49,10 +49,10 @@ class Man(Figure):
 
                 if take_position and board.is_field_empty(take_position):
                     moves.append(
-                        TreeNode(
-                            take_position,
-                            self._possible_takes(board, take_position,
-                                                 allow_up, allow_down)))
+                        TreeNode(take_position,
+                                 self._possible_takes(board, take_position,
+                                                      allow_up, allow_down),
+                                 taking=pos))
 
         return tuple(moves)
 
