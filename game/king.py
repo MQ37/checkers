@@ -34,6 +34,7 @@ class King(Figure):
                                                             allow_se=allow_se,
                                                             allow_nw=allow_nw,
                                                             allow_ne=allow_ne):
+                    # If empty continue exploring
                     if board.is_field_empty(take_position):
                         moves.append(
                             TreeNode(
@@ -45,6 +46,10 @@ class King(Figure):
                                     allows=negate_allows(*invert_single_allow(
                                         allow_sw, allow_se, allow_nw,
                                         allow_ne)))))
+                    # If blocked by friendly figure stop
+                    elif board.field_at(
+                            take_position).figure.owner is self.owner:
+                        break
 
         return Tree(TreeNode(cur_pos, tuple(moves)))
 

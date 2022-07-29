@@ -262,14 +262,23 @@ class Board:
                 continue
             playable_figures[fig] = tree
 
-        # Figures that cat take have priority
+        # Figures that can take have priority
         priority_figures = {}
+        priority_kings = {}
 
         for fig in playable_figures:
             tree = playable_figures[fig]
             if any([child.taking for child in tree.root.children]):
-                priority_figures[fig] = tree
+                if isinstance(fig, King):
+                    priority_kings[fig] = tree
+                else:
+                    priority_figures[fig] = tree
 
+        # If King can take he has priority
+        if priority_kings:
+            return priority_kings
+
+        # If Figure / Man can take he has priority (after King)
         if priority_figures:
             return priority_figures
 
