@@ -25,8 +25,23 @@ class Player:
     def remove_figure(self, figure):
         self._figures.remove(figure)
 
-    def __str__(self):
+    def __repr__(self):
         return "Player (%s)" % self.color
 
-    def __repr__(self):
-        return str(self)
+    def __str__(self):
+        return repr(self)
+
+    def play_turn(self, board, interface):
+        # Get playable figures
+        playable_figures = board.get_player_playable_figures(self)
+
+        # Get selected move from the interface
+        move = interface.interface_turn(board, self, playable_figures)
+
+        # Execute the moves
+        pos_from = move[0][0]
+        for m in move[1:]:
+            pos_to = m[0]
+            pos_taking = m[1]
+            board.move(self, pos_from, pos_to, pos_taking)
+            pos_from = pos_to

@@ -1,6 +1,7 @@
 from .board import Board
 from .player import Player
 from .color import Color
+from .ai import AI
 
 
 class Game:
@@ -13,7 +14,7 @@ class Game:
 
         self.player_w = Player(Color.WHITE)
         if settings["ai"]:
-            raise Exception("AI not implemented yet")
+            self.player_b = AI(Color.BLACK)
             interface.ask_nicknames(ai=True)
         else:
             self.player_b = Player(Color.BLACK)
@@ -46,20 +47,7 @@ class Game:
     def turn(self):
         player = self._get_current_player()
 
-        # Get playable figures
-        playable_figures = self.board.get_player_playable_figures(player)
-
-        # Get selected move from the interface
-        move = self.interface.interface_turn(self.board, player,
-                                             playable_figures)
-
-        # Execute the moves
-        pos_from = move[0][0]
-        for m in move[1:]:
-            pos_to = m[0]
-            pos_taking = m[1]
-            self.board.move(player, pos_from, pos_to, pos_taking)
-            pos_from = pos_to
+        player.play_turn(self.board, self.interface)
 
         # If winner show and exit
         winner = self.board.check_win()

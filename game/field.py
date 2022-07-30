@@ -36,14 +36,13 @@ class Field:
     def clear(self):
         self._figure = None
 
-    # Str Repr
     def __str__(self):
+        return repr(self)
+
+    def __repr__(self):
         if self.figure:
             return "Field (%s) at %s containing %s" % (
                 self.color, self.position.notation, self.figure)
         else:
             return "Field (%s) at %s containing Nothing" % (
                 self.color, self.position.notation)
-
-    def __repr__(self):
-        return str(self)

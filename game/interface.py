@@ -54,6 +54,10 @@ class CLIInterface:
             elif choice == 4:
                 return {"load": path, "ai": True}
 
+    def show_move(self, player, move):
+        print("%s move: %s" %
+              (player, " -> ".join(map(lambda pos: pos[0].notation, move))))
+
     def interface_turn(self, board, player, playable_figures):
         board.pretty_print()
 
