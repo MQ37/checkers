@@ -1,4 +1,4 @@
-# Dáma
+# Checkers
 
 - school project checkers game
 
