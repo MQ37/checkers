@@ -1,20 +1,10 @@
-# run.py
-
 import game
-from game.coord_map import COORD_MAP_R
-from game.helpers import index_to_coords
-from game.position import Position
-from game.tree.Tree import Tree
+from game.interface import CLIInterface
 
-game = game.Game()
+interface = CLIInterface()
 
-game.board.pretty_print()
+game = game.Game(interface)
 
-pos = Position.from_notation("D4")
-possible_moves = game.board.field_at(pos).figure.possible_moves(game.board)
-print(pos.notation, pos.tuple)
-print()
-for move in possible_moves.root.children:
-    print(repr(move))
+while True:
+    game.turn()
 
-print(game.board.export())

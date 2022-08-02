@@ -7,6 +7,7 @@ from .position import Position
 
 
 class Field:
+
     def __init__(self, color: Color, pos: Position, figure: Optional = None):
         # White, Black
         self._color = color
@@ -35,12 +36,13 @@ class Field:
     def clear(self):
         self._figure = None
 
-    # Str Repr
     def __str__(self):
-        if self.figure:
-            return "Field (%s) at %s containing %s" % (self.color, self.position.notation, self.figure)
-        else:
-            return "Field (%s) at %s containing Nothing" % (self.color, self.position.notation)
+        return repr(self)
 
     def __repr__(self):
-        return str(self)
+        if self.figure:
+            return "Field (%s) at %s containing %s" % (
+                self.color, self.position.notation, self.figure)
+        else:
+            return "Field (%s) at %s containing Nothing" % (
+                self.color, self.position.notation)

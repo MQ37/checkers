@@ -1,46 +1,60 @@
 from .board import Board
 from .player import Player
 from .color import Color
+from .ai import AI
 
 
 class Game:
-    def __init__(self):
+
+    def __init__(self, interface):
         self.board = Board()
+        self.interface = interface
+
+        settings = interface.menu(self)
+
         self.player_w = Player(Color.WHITE)
-        self.player_b = Player(Color.BLACK)
+        if settings["ai"]:
+            self.player_b = AI(Color.BLACK)
+            interface.ask_nicknames(ai=True)
+        else:
+            self.player_b = Player(Color.BLACK)
+            interface.ask_nicknames()
+        self.nturns = 0
 
-        self.board.populate_board(self.player_w, self.player_b)
+        if settings["load"]:
+            self.load_csv(settings["load"])
+        else:
+            self.board.populate_board(self.player_w, self.player_b)
 
-    # TODO export to CSV file
-    def export_csv(self, output):
+    def export_csv(self, path):
         try:
-            with open(output, "w", newline='') as file:
-                file.write(self.board.export())
-                return "Game was saved."
-        except:
+            with open(path, "w",
+                      newline='') as f:  # newline for avoiding blank lines
+                f.write(self.board.export())
+                print("Game was saved.")
+        except Exception:
             print("WRONG DATA FORMAT - Check the data. ---> export_csv")
 
-    # TODO zeptat se na vstup (obecný) ?
-    def load_csv(self, input):
-        valid_characters = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
-        valid_numbers = ('1', '2', '3', '4', '5', '6', '7', '8')
+    def load_csv(self, path):
+        self.board.load(self.player_w, self.player_b, path)
 
-        try:
-            with open(input, "r") as file:
-                file_reader = file.read()
-                data = list(file_reader.split("\n"))
+    def _get_current_player(self):
+        if self.nturns % 2 == 0:
+            return self.player_w
+        else:
+            return self.player_b
 
-                for inx in data:
-                    if (inx[0] in valid_characters) and (inx[1] in valid_numbers) and (inx[2] == ',') and (inx[5:]) == '':
-                        if ("w" or "ww") in inx[3:5]:  # inx[3:5] checks color
-                            self.player_w.create_figure(inx)
-                        elif ("b" or "bb") in inx[3:5]:  # inx[3:5] checks color
-                            self.player_b.create_figure(inx)
-                        else:
-                            raise Exception("WRONG DATA FORMAT - Check the data.")
-                    else:
-                        raise Exception("WRONG DATA FORMAT - Check the data.")
-                return "Game was loaded."
+    def turn(self):
+        player = self._get_current_player()
 
-        except:
-            return "WRONG DATA FORMAT - Check the data."
+        player.play_turn(self.board, self.interface)
+
+        # If winner show and exit
+        winner = self.board.check_win()
+        if winner:
+            self.interface.show_winner(winner)
+            exit()
+
+        self.board.transform_mans_to_kings(self.player_w, self.player_b)
+
+        self.nturns += 1
