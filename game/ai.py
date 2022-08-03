@@ -33,5 +33,7 @@ class AI(Player):
             board.move(self, pos_from, pos_to, pos_taking)
             pos_from = pos_to
 
+        return move
+
     def __repr__(self):
         return "AI (%s)" % self.color

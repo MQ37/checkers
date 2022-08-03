@@ -15,6 +15,7 @@ class Board:
     def __init__(self):
         self._board: list[list[Field]] = list(self._generate_board())
         self._positions = {}
+        self.__log = []
 
     def field_at(self, pos: Position) -> Field:
         return self._board[pos.row][pos.col]
@@ -318,3 +319,10 @@ class Board:
             if figure.owner is not potential_winner:
                 return None
         return potential_winner
+
+    def log_move(self, move):
+        str_move = " -> ".join(map(lambda pos: pos[0].notation, move))
+        self.__log.append(str_move)
+
+    def get_log(self):
+        return self.__log
