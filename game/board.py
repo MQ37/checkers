@@ -7,7 +7,7 @@ from .color import Color
 from .king import King
 from .player import Player
 from .position import Position
-from .helpers import BOARD_SIZE
+from .helpers import BOARD_SIZE, coords_to_index
 
 
 class Board:
@@ -15,6 +15,7 @@ class Board:
     def __init__(self):
         self._board: list[list[Field]] = list(self._generate_board())
         self._positions = {}
+        self.__log = []
 
     def field_at(self, pos: Position) -> Field:
         return self._board[pos.row][pos.col]
@@ -171,8 +172,8 @@ class Board:
                     lines += "%s\n" % line
         return lines
 
-    def load(self, player_w, player_b, path):
-        with open(path, "r") as f:
+    def load(self, player_w, player_b, filepath):
+        with open(filepath, "r") as f:
             data = f.readlines()
 
             for i, line in enumerate(data):
@@ -185,6 +186,12 @@ class Board:
                                     (i, line))
 
                 pos_not, fig = match.groups()
+                # Check if position is valid:
+                ii, ij = coords_to_index(pos_not)
+                if (ii % 2 == 0 and ij % 2 != 0) or (ii % 2 != 0
+                                                     and ij % 2 == 0):
+                    raise Exception("Invalid position %s" % pos_not)
+
                 fig = fig.lower().strip()
                 pos = Position.from_notation(pos_not.strip())
 
@@ -313,8 +320,17 @@ class Board:
     # TODO: check win in other scenarios
     # for example when figures are locked and no move is possible
     def check_win(self):
+        # Win by taking all player figures
         potential_winner = list(self._positions.keys())[0].owner
         for figure in self._positions:
             if figure.owner is not potential_winner:
                 return None
+
         return potential_winner
+
+    def log_move(self, move):
+        str_move = " -> ".join(map(lambda pos: pos[0].notation, move))
+        self.__log.append(str_move)
+
+    def get_log(self):
+        return self.__log

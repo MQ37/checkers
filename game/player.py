@@ -45,3 +45,5 @@ class Player:
             pos_taking = m[1]
             board.move(self, pos_from, pos_to, pos_taking)
             pos_from = pos_to
+
+        return move

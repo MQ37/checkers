@@ -69,10 +69,17 @@ class CLIInterface:
             print("%s: %s" %
                   (i + 1, playable_figures[fig].root.value.notation))
 
-        choice = int(input("\nChoose your figure from above! ⇉ "))
-        while not choice in range(1, len(playable_figures) + 1):
-            choice = int(
-                input("There is no such figure, try different choice! ⇉ "))
+        choice_msg = "\nChoose your figure from above (L = game log)! ⇉ "
+        choice = input(choice_msg)
+        while not choice in map(str, range(1, len(playable_figures) + 1)):
+            if choice == "L":
+                game_log = board.get_log()
+                print("Game log:")
+                for move in game_log:
+                    print("--- %s" % move)
+            choice = input(choice_msg)
+
+        choice = int(choice)
 
         figure = list(playable_figures.keys())[choice - 1]
         tree = playable_figures[figure]

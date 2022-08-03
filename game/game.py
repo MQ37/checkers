@@ -47,7 +47,10 @@ class Game:
     def turn(self):
         player = self._get_current_player()
 
-        player.play_turn(self.board, self.interface)
+        move = player.play_turn(self.board, self.interface)
+
+        # Log move
+        self.board.log_move(move)
 
         # If winner show and exit
         winner = self.board.check_win()
