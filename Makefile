@@ -7,4 +7,4 @@ run:
 format:
 	yapf -i -r game/
 
-.PHONY: test run
+.PHONY: test run format
