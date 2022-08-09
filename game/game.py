@@ -38,16 +38,22 @@ class Game:
     def load_csv(self, path):
         self.board.load(self.player_w, self.player_b, path)
 
-    def _get_current_player(self):
+    def _get_current_player(self, other=False):
         if self.nturns % 2 == 0:
-            return self.player_w
+            return self.player_w if not other else self.player_b
         else:
-            return self.player_b
+            return self.player_b if not other else self.player_w
 
     def turn(self):
         player = self._get_current_player()
 
         move = player.play_turn(self.board, self.interface)
+
+        # Current player cannot move, other player wins
+        if not move:
+            winner = self._get_current_player(other=True)
+            self.interface.show_winner(winner)
+            exit()
 
         # Log move
         self.board.log_move(move)

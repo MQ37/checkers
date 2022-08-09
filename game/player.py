@@ -34,6 +34,8 @@ class Player:
     def play_turn(self, board, interface):
         # Get playable figures
         playable_figures = board.get_player_playable_figures(self)
+        if not playable_figures:
+            return None
 
         # Get selected move from the interface
         move = interface.interface_turn(board, self, playable_figures)
