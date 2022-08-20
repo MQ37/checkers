@@ -63,9 +63,22 @@ class Board:
 
                 if field.figure:
                     if field.figure.color == Color.BLACK:
+<<<<<<< Updated upstream
                         col_content = "\u26C2"
                     else:
                         col_content = "\u26C0"
+=======
+                        if isinstance(field.figure, King):
+                            col_content = "⛁"
+                        else:
+                            col_content = "⛀"
+
+                    else:
+                        if isinstance(field.figure, King):
+                            col_content = "⛃"
+                        else:
+                            col_content = "⛂"
+>>>>>>> Stashed changes
                 else:
                     col_content = ""
 
