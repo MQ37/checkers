@@ -7,11 +7,6 @@ from .helpers import diff_to_allow, invert_single_allow, negate_allows
 
 class King(Figure):
 
-    # TODO: how to handle moves after taking, is taking after taking mandatory
-    # or can we choose not to take after first take and move to field that has
-    # no taking position? Right now taking after taking is not mandatory and
-    # player can choose not to take after first take.
-    # We need to check game rules
     def possible_moves(self, board):
         cur_pos: Position = board.location(self)
 

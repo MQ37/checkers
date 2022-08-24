@@ -22,7 +22,7 @@ class AI(Player):
         best_move = None
         for figure in playable_figures:
             tree = playable_figures[figure]
-            moves, taking_moves = tree.as_moves(split_taking=True)
+            _, taking_moves = tree.as_moves(split_taking=True)
             for move in taking_moves:
                 count = 0
                 for node in move:

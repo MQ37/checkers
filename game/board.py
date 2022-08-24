@@ -257,7 +257,6 @@ class Board:
         return filter(lambda fig: fig.owner is player, self._positions)
 
     # Returns dict figure -> tree
-    # TODO: add king priority
     def get_player_playable_figures(self, player):
         figures = self.get_player_figures(player)
         playable_figures = {}
@@ -317,8 +316,6 @@ class Board:
                 self._add_figure(king_figure, pos)
 
     # Returns None or player winner
-    # TODO: check win in other scenarios
-    # for example when figures are locked and no move is possible
     def check_win(self):
         # Win by taking all player figures
         potential_winner = list(self._positions.keys())[0].owner
